@@ -1,1 +1,0 @@
-/home/jakubik/Studia/sysopy/zestaw1/zad1/prog.c
