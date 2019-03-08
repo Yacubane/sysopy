@@ -1,0 +1,17 @@
+create_table 100
+start_reporting report2.txt
+start_report_timer
+search_directory / "*" tmp
+stop_report_timer big_search
+start_report_timer
+search_directory /usr "*" tmp
+stop_report_timer medium_search
+start_report_timer
+search_directory /usr/lib "*" tmp
+stop_report_timer small_search
+start_report_timer
+store_last_result 
+stop_report_timer pomiar2
+remove_block 1 
+remove_block 0
+stop_reporting

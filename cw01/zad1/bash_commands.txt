@@ -1,3 +1,4 @@
 export LD_LIBRARY_PATH=~/Studia/sysopy/zestaw1/zad1:$LD_LIBRARY_PATH
 gcc main.c -lfinder -L ./ -o main
  sudo ln -s /usr/lib/libfinder.so.1.0.0 /usr/lib/libfinder.so.1
+./a.out $(cat test.txt)

@@ -2,14 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include "finder.h"
+#include "reporting.h"
 #include <errno.h>
 #include <time.h>
 #include <sys/times.h>
+#include <unistd.h>
 
-#define ESUCCESS 0
-#define EPARSE_ERROR_TYPE_MISMATCH -1
-#define EPARSE_ERROR_WRONG_NUMBER_OF_ARGUMENTS -2
-#define EPARSE_ERROR_UNDEFINED_OPERATION -3
 
 struct timespec start, stop;
 struct tms start_tms, stop_tms;
@@ -37,13 +35,13 @@ struct tms diff_tms(struct tms start, struct tms end) {
     return temp;
 }
 
-void start_timer()
+void start_report_timer()
 {
     times(&start_tms);
     clock_gettime(CLOCK_REALTIME, &start);
 }
 
-void stop_timer(char* text)
+void stop_report_timer(char* text)
 {
     clock_t test = times(&stop_tms);
     clock_gettime(CLOCK_REALTIME, &stop);
@@ -51,16 +49,38 @@ void stop_timer(char* text)
     struct timespec diff_time = diff(start, stop);
     struct tms diff_time_tms = diff_tms(start_tms, stop_tms);
 
+    long clktck = sysconf(_SC_CLK_TCK);
 
-    printf("%s %ld %ld %ld %ld %ld %ld\n", text,diff_time.tv_sec, diff_time.tv_nsec, 
+    char buffer[255]; 
+
+    sprintf(buffer, "%-15s %9ld %12ld %6ld %6ld %6ld %6ld\n",
+            text,diff_time.tv_sec, diff_time.tv_nsec, 
             stop_tms.tms_utime, stop_tms.tms_stime,
-            diff_time_tms.tms_cutime, diff_time_tms.tms_cstime);
+            diff_time_tms.tms_cutime, diff_time_tms.tms_cstime
+            //diff_time_tms.tms_utime / (double) clktck, diff_time_tms.tms_stime / (double) clktck,
+           // diff_time_tms.tms_cutime / (double) clktck, diff_time_tms.tms_cstime / (double) clktck
+            );
+
+    add_report_text(buffer);
+}
+
+void add_first_reporting_line()
+{
+    char buffer[255]; 
+
+    sprintf(buffer, "%-15s %9s %12s %6s %6s %6s %6s\n",
+            "Measurement", "Real[s]", "Real[n]", 
+            "utime", "stime", "cutime", "cstime");
+
+    add_report_text(buffer);
 }
 
 int check_argument_size(int index, int arguments_length, int argc)
 {
-    if(index + arguments_length >= argc) 
+    if(index + arguments_length >= argc) {
+        fprintf(stderr, "Wrong number of arguments");
         return -1;
+    }
     return 0;
 }
 
@@ -68,67 +88,90 @@ int parse_command(int index, int argc, char *argv[])
 {
     if(!strcmp(argv[index], "create_table"))
     {
-        if(check_argument_size(index, 1, argc)) 
-            return EPARSE_ERROR_WRONG_NUMBER_OF_ARGUMENTS; 
+        if(check_argument_size(index, 1, argc) < 0) 
+            return -1; 
 
         errno = 0;
         char* end = NULL;
         int number = (int)strtol(argv[index+1], &end, 10);
 
         if(errno != 0 || end == argv[index+1])
-            return EPARSE_ERROR_TYPE_MISMATCH;
+            return -1;
 
-        start_timer();
         create_table(number);
-        stop_timer("create_table");
 
         return index + 1;
     } 
     else if(!strcmp(argv[index], "search_directory"))
     {
-        if(check_argument_size(index, 3, argc)) 
-            return EPARSE_ERROR_WRONG_NUMBER_OF_ARGUMENTS; 
+        if(check_argument_size(index, 3, argc) < 0) 
+            return -1; 
 
         char* dir = argv[index+1];
         char* file = argv[index+2];
         char* name_file_temp = argv[index+3];
 
-        start_timer();
         set_search(dir, file, name_file_temp);
         search_directory();
-        stop_timer("search_directory");
 
         return index + 3;
     } 
-    else if(!strcmp(argv[index], "save_last_result"))
+    else if(!strcmp(argv[index], "store_last_result"))
     {
-        start_timer();
-        save_last_result();
-        stop_timer("save_last_result");
+        store_last_result();
 
         return index;
     } 
     else if(!strcmp(argv[index], "remove_block"))
     {
-        if(check_argument_size(index, 1, argc)) 
-            return EPARSE_ERROR_WRONG_NUMBER_OF_ARGUMENTS; 
+        if(check_argument_size(index, 1, argc) < 0) 
+            return -1; 
 
         errno = 0;
         char* end = NULL;
         int number = (int)strtol(argv[index+1], &end, 10);
 
         if(errno != 0 || end == argv[index+1])
-            return EPARSE_ERROR_TYPE_MISMATCH;
+            return -1;
 
-        start_timer();
         remove_data_block(number);
-        stop_timer("remove_data_block");
 
         return index + 1;
-    } 
+    }
+    else if(!strcmp(argv[index], "start_reporting"))
+    {
+        if(check_argument_size(index, 1, argc) < 0) 
+            return -1; 
+
+        char* filename = argv[index+1];
+
+        start_reporting(filename);
+        add_first_reporting_line();
+
+        return index + 1;
+    }  
+    else if(!strcmp(argv[index], "stop_reporting"))
+    {
+        stop_reporting();
+        return index;
+    }  
+    else if(!strcmp(argv[index], "start_report_timer"))
+    {
+        start_report_timer();
+        return index;
+    }  
+    else if(!strcmp(argv[index], "stop_report_timer"))
+    {
+        if(check_argument_size(index, 1, argc) < 0) 
+            return -1; 
+
+        char* text = argv[index+1];
+        stop_report_timer(text);
+        return index+1;
+    }  
     else
     {
-        return EPARSE_ERROR_UNDEFINED_OPERATION;
+        return -1;
     }
     
 }

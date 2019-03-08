@@ -1,0 +1,5 @@
+Measurement       Real[s]      Real[n]  utime  stime cutime cstime
+big_search              3    908643812      0      0    143    226
+medium_search           0    947743614      0      0     33     58
+small_search            0     83094746      0      0      4      4
+pomiar2                 0      1028506      0      0      0      0
