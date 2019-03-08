@@ -1,0 +1,1 @@
+../zad1/finder.h

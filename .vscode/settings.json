@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "fcntl.h": "c",
-        "unistd.h": "c"
+        "unistd.h": "c",
+        "times.h": "c",
+        "time.h": "c"
     }
 }
