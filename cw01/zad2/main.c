@@ -53,9 +53,9 @@ void stop_report_timer(char* text)
 
     char buffer[255]; 
 
-    sprintf(buffer, "%-15s %9ld %12ld %6ld %6ld %6ld %6ld\n",
+    sprintf(buffer, "%-20s %9ld %12ld %6ld %6ld %6ld %6ld\n",
             text,diff_time.tv_sec, diff_time.tv_nsec, 
-            stop_tms.tms_utime, stop_tms.tms_stime,
+            diff_time_tms.tms_utime, diff_time_tms.tms_stime,
             diff_time_tms.tms_cutime, diff_time_tms.tms_cstime
             //diff_time_tms.tms_utime / (double) clktck, diff_time_tms.tms_stime / (double) clktck,
            // diff_time_tms.tms_cutime / (double) clktck, diff_time_tms.tms_cstime / (double) clktck
@@ -68,7 +68,7 @@ void add_first_reporting_line()
 {
     char buffer[255]; 
 
-    sprintf(buffer, "%-15s %9s %12s %6s %6s %6s %6s\n",
+    sprintf(buffer, "%-20s %9s %12s %6s %6s %6s %6s\n",
             "Measurement", "Real[s]", "Real[n]", 
             "utime", "stime", "cutime", "cstime");
 
@@ -122,7 +122,7 @@ int parse_command(int index, int argc, char *argv[])
 
         return index;
     } 
-    else if(!strcmp(argv[index], "remove_block"))
+    else if(!strcmp(argv[index], "remove_data_block"))
     {
         if(check_argument_size(index, 1, argc) < 0) 
             return -1; 
