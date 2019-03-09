@@ -1,0 +1,11 @@
+Measurement            Real[s]      Real[n]  utime  stime cutime cstime
+big_search                   3    347113958      0      0    127    203
+medium_search                0    897133463      0      0     34     54
+small_search                 0     88908464      0      0      3      5
+big_store                    0     69708563      0      6      0      0
+medium_store                 0     11407068      0      1      0      0
+small_store                  0      1414624      0      0      0      0
+big_data_delete              0      5809317      0      0      0      0
+medium_data_delete           0      1956199      0      0      0      0
+small_data_delete            0       113694      0      0      0      0
+data_test                    4    845009653      0      8    164    293

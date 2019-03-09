@@ -40,9 +40,10 @@ int add_report_text(char* content) {
 
 int stop_reporting() {
     if(reporting_status==0)
-        return -2;
+        return -1;
 
     reporting_status = 0;
     close(fd);
-    
+
+    return 0;    
 }

@@ -1,22 +1,25 @@
+CC=gcc
+CFLAGS=-Wall
+
 all: 
 
-static_lib : finder.c 
-	gcc -c finder.c -Wall
-	ar rcs libfinder.a finder.o
+static : test.c 
+	$(CC) $(CFLAGS) test.c reporting.c ../zad1/libfinder.a -I../zad1/ -o test
 
-shared_lib : finder.c
-	gcc -fPIC -c finder.c
-	gcc -shared -Wl,-soname,libfinder.so.1 -o libfinder.so.1.0.1 finder.o -lc
-	ln -s libfinder.so.1.0.1 libfinder.so.1
-	ln -s libfinder.so.1.0.1 libfinder.so
+shared : test.c
+	$(CC) $(CFLAGS) test.c reporting.c -L../zad1/ -I../zad1/ -lfinder -o test
 
-add_shared_lib : shared_finder
-	sudo cp libfinder.so.1.0.1 /usr/lib
-	sudo rm -f /usr/lib/libfinder.so.1
-	sudo rm -f /usr/lib/libfinder.so
-	sudo ln -s /usr/libfinder.so.1.0.1 /usr/libfinder.so.1
-	sudo ln -s /usr/libfinder.so.1.0.1 /usr/libfinder.so
-	sudo ldconfig
+dynamic : test.c 
+	$(CC) $(CFLAGS) test.c reporting.c finder_dynamic.c -ldl -D DYNAMIC -o test
+
+test_static : static
+	./test $$(cat test2.txt)
+
+test_shared : shared
+	./test $$(cat test2.txt)
+
+test_dynamic : dynamic
+	./test $$(cat test2.txt)
 
 clean:
 	rm -f *.o

@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include "finder.h"
 
-const int COMMAND_BUFFER_SIZE = 255;
+static const int COMMAND_BUFFER_SIZE = 255;
 
 struct search_params
 {
@@ -14,11 +14,11 @@ struct search_params
 
 };
 
-int library_initalized = 0;
+static int library_initalized = 0;
 
-struct search_params *main_search_params;
-char **search_results;
-int search_results_size;
+static struct search_params *main_search_params;
+static char **search_results;
+static int search_results_size;
 
 
 int check_library_initalized()
@@ -118,13 +118,26 @@ int remove_data_block(int index)
     if(check_library_initalized() < 0)
         return -1;
 
-    if(search_results[index] != NULL) {
+    if(search_results[index] != NULL) 
+    {
         free(search_results[index]);
         search_results[index] = NULL;
         return 0;
     }
     fprintf(stderr, "libfinder - there is no datablock with index %d\n", index);
     return -1;
+}
+
+char* get_data_block(int index) 
+{
+    if(search_results[index] != NULL) 
+    {
+        return search_results[index];
+    }
+    else {
+        fprintf(stderr, "libfinder - there is no datablock with index %d\n", index);
+        return NULL;
+    }
 }
 
 

@@ -1,0 +1,105 @@
+start_report_timer
+search_directory /usr/lib "lib*" tmp
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+store_last_result
+remove_data_block 0
+stop_report_timer weird_test
