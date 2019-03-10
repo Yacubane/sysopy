@@ -5,6 +5,8 @@
         "times.h": "c",
         "time.h": "c",
         "reporting.h": "c",
-        "finder.h": "c"
+        "finder.h": "c",
+        "finder_dynamic.h": "c",
+        "bitsperlong.h": "c"
     }
 }
