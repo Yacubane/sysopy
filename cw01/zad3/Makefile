@@ -2,7 +2,7 @@ CC=gcc
 CFLAGS=-Wall $(if $(O),-O$(O))
 APPEND=0
 RESULT_FILE=results.txt
-RESULT_NAME=TESTa
+RESULT_NAME=TEST
 
 all: report3a report3b
 default : all

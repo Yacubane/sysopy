@@ -1,0 +1,39 @@
+test_static
+Measurement            Real[s]      Real[n]  utime[s]  stime[s] cutime[s] cstime[s]
+big_search                   3    184691099      0.00      0.00      1.18      1.97
+medium_search                0    849345399      0.00      0.00      0.34      0.48
+small_search                 0     78096470      0.00      0.00      0.02      0.06
+big_store                    0      2415801      0.00      0.00      0.00      0.00
+medium_store                 0      2186295      0.00      0.00      0.00      0.00
+small_store                  0        26515      0.00      0.00      0.00      0.00
+big_data_delete              0       226296      0.00      0.00      0.00      0.00
+medium_data_delete           0       174229      0.00      0.00      0.00      0.00
+small_data_delete            0         1159      0.00      0.00      0.00      0.00
+data_block_test              3    940771295      0.00      0.01      1.48      2.41
+
+test_shared
+Measurement            Real[s]      Real[n]  utime[s]  stime[s] cutime[s] cstime[s]
+big_search                   3     96325075      0.00      0.00      1.13      1.91
+medium_search                0    805972730      0.00      0.00      0.33      0.47
+small_search                 0     77609238      0.00      0.00      0.03      0.03
+big_store                    0      2549194      0.00      0.00      0.00      0.00
+medium_store                 0      2182879      0.00      0.00      0.00      0.00
+small_store                  0        24383      0.00      0.00      0.00      0.00
+big_data_delete              0       246746      0.00      0.00      0.00      0.00
+medium_data_delete           0       172003      0.00      0.00      0.00      0.00
+small_data_delete            0         1263      0.00      0.00      0.00      0.00
+data_block_test              3    977349696      0.01      0.00      1.49      2.43
+
+test_dynamic
+Measurement            Real[s]      Real[n]  utime[s]  stime[s] cutime[s] cstime[s]
+big_search                   3    122510351      0.00      0.00      1.12      1.95
+medium_search                0    793171782      0.00      0.00      0.33      0.46
+small_search                 0     78636279      0.00      0.00      0.02      0.05
+big_store                    0      2384996      0.00      0.00      0.00      0.00
+medium_store                 0      2368956      0.00      0.00      0.00      0.00
+small_store                  0        38532      0.00      0.00      0.00      0.00
+big_data_delete              0       293524      0.00      0.00      0.00      0.00
+medium_data_delete           0       233113      0.00      0.00      0.00      0.00
+small_data_delete            0         1341      0.00      0.00      0.00      0.00
+data_block_test              3    933374703      0.00      0.00      1.38      2.50
+

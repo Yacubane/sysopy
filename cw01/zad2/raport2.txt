@@ -1,0 +1,13 @@
+REPORT_TASK2
+Measurement            Real[s]      Real[n]  utime[s]  stime[s] cutime[s] cstime[s]
+big_search                   3    129485586      0.00      0.00      1.26      1.82
+medium_search                0    794086843      0.00      0.00      0.27      0.51
+small_search                 0     76435993      0.00      0.00      0.04      0.04
+big_store                    0      2328065      0.00      0.00      0.00      0.00
+medium_store                 0      2258068      0.00      0.00      0.00      0.00
+small_store                  0        29104      0.00      0.00      0.00      0.00
+big_data_delete              0       233551      0.00      0.00      0.00      0.00
+medium_data_delete           0       205920      0.00      0.00      0.00      0.00
+small_data_delete            0         1246      0.00      0.00      0.00      0.00
+data_block_test              3    976890618      0.00      0.01      1.44      2.49
+
