@@ -1,3 +1,10 @@
+Wyniki z wykonanych testow nie wykazuja roznic miedzy szybkoscia
+dzialania kompilacji na roznych trybach optymalizacji (-O0 ... -Os)
+
+Powtarzajac wiele razy pomiary uzyskiwane wyniki nieco sie roznily,
+co wynika ze sposobu dzialania systemu operacyjnego i roznego przydzielenia
+czasu procesora. Prawdopodobnie wlasnie przez to nie mozna zauwazyc roznic.
+
 test_static_optimize-O0
 Measurement            Real[s]   Real[n]  utime[s]  stime[s] cutime[s] cstime[s]
 big_search                   3 231174997      0.00      0.00      1.23      1.96
