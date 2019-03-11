@@ -4,7 +4,7 @@ APPEND=0
 RESULT_FILE=results.txt
 RESULT_NAME=TEST
 
-all: report3a report3b
+all: clean_all report3a report3b
 default : all
 
 main_static : ../zad2/main.c  ../zad2/reporting.c ../zad1/libfinder.a

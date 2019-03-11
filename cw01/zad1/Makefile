@@ -26,8 +26,10 @@ static_lib : libfinder.a
 shared_lib : libfinder.so
 add_shared_lib : /usr/lib/libfinder.so
 
-clean:
+clean :
 	rm -f *.o
+
+clean_all : clean
 	rm -f *.a
 	rm -f *.so*
 	sudo rm -f /usr/lib/libfinder*

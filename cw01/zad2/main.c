@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include <unistd.h>
 #include "reporting.h"
 #ifdef DYNAMIC
     #include "finder_dynamic.h"

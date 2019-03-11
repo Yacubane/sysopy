@@ -1,10 +1,8 @@
 #include "reporting.h"
-#include <sys/types.h>
-#include <sys/stat.h>
+#include <stdio.h>
+#include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
-#include <unistd.h>
-#include <stdio.h>
 #include <time.h>
 #include <sys/times.h>
 
@@ -20,18 +18,18 @@ static int create_error(char* message) {
     return -1;
 }
 
-int start_reporting(char* filename, char* title, int flag)
+int start_reporting(char* filename, char* title, int append)
 {
     if(reporting_status==1)
         return create_error("Reporting is already started");
 
-    int realFlag = 0;
-    if(flag == 1)
-        realFlag = O_APPEND;
+    int flag = 0;
+    if(append == 1)
+        flag = O_APPEND;
     else
-        realFlag = O_TRUNC;
+        flag = O_TRUNC;
 
-    if((fd = open(filename, O_WRONLY | O_CREAT | realFlag, 0644)) >= 0) 
+    if((fd = open(filename, O_WRONLY | O_CREAT | flag, 0644)) >= 0) 
     {
         char buffer[255]; 
 

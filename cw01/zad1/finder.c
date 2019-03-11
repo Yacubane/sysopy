@@ -3,43 +3,45 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include "finder.h"
+#include <string.h>
 
-static const int COMMAND_BUFFER_SIZE = 255;
-
-struct search_params
+struct search_instance_t
 {
     char *dir;
     char *file;
     char *name_file_temp;
 
+    char **search_results;
+    int search_results_size;
+
 };
 
 static int library_initalized = 0;
 
-static struct search_params *main_search_params;
-static char **search_results;
-static int search_results_size;
+static struct search_instance_t *search_instance;
 
+static int create_error(char* message) {
+    fprintf(stderr, "%s\n", message);
+    return -1;
+}
 
 int check_library_initalized()
 {
-    if(library_initalized == 0){
-        fprintf(stderr, "libfinder - not initalized\n");
-        return -1;
-    }
+    if(library_initalized == 0)
+        return create_error("libfinder - not initalized");
+
     return 0;
 }
 
 int create_table(unsigned int table_size)
 {
-    if(library_initalized == 1){
-        fprintf(stderr, "libfinder - already initalized\n");
-        return -1;
-    }
+    if(library_initalized == 1)
+        return create_error("libfinder - already initalized");
 
-    main_search_params = malloc(sizeof(struct search_params));
-    search_results = calloc(table_size, sizeof(char*));
-    search_results_size = table_size;
+
+    search_instance = malloc(sizeof(struct search_instance_t));
+    search_instance->search_results = calloc(table_size, sizeof(char*));
+    search_instance->search_results_size = table_size;
     library_initalized = 1;
 
     return 0;
@@ -50,9 +52,10 @@ int set_search(char *dir, char *file, char *name_file_temp)
     if(check_library_initalized() < 0)
         return -1;
 
-    main_search_params->dir = dir;
-    main_search_params->file = file;
-    main_search_params->name_file_temp = name_file_temp;
+    search_instance->dir = dir;
+    search_instance->file = file;
+    search_instance->name_file_temp = name_file_temp;
+    library_initalized = 2;
 
     return 0;
 }
@@ -62,26 +65,34 @@ int store_last_result()
     if(check_library_initalized() < 0)
         return -1;
 
-    int fd = open(main_search_params->name_file_temp, O_RDONLY);
+    int fd;
+    if((fd = open(search_instance->name_file_temp, O_RDONLY)) < 0)
+        return create_error("libfinder - error during reading tmp file");
+
     int start_position = lseek(fd, 0, SEEK_CUR);
-    int size = lseek(fd, 0, SEEK_END);
+    int size;
+    if((size = lseek(fd, 0, SEEK_END)) < 0) {
+        close(fd);
+        return create_error("libfinder - cannot seek tmp file");
+    }
+
     lseek(fd, start_position, SEEK_SET);
     char *file_buffer = calloc(size, sizeof(char));
-    read(fd, file_buffer, size);
+    if(read(fd, file_buffer, size) < 0){
+        close(fd);
+        return create_error("libfinder - cannot read tmp file");
+    }
     close(fd);
-    
 
-    for(int i = 0; i < search_results_size; i++)
+    for(int i = 0; i < search_instance->search_results_size; i++)
     {
-        if(search_results[i] == NULL) 
+        if(search_instance->search_results[i] == NULL) 
         {
-            search_results[i] = file_buffer;
+            search_instance->search_results[i] = file_buffer;
             return i;
         }
     }
-
-    fprintf(stderr, "libfinder - cannot add more new data blocks\n");
-    return -1;
+    return create_error("libfinder - cannot add more new data blocks");
 }
 
 int search_directory()
@@ -89,39 +100,42 @@ int search_directory()
     if(check_library_initalized() < 0)
         return -1;
 
-    char buffer[COMMAND_BUFFER_SIZE];
-    if(snprintf(buffer, COMMAND_BUFFER_SIZE, "find %s -name %s > %s 2>/dev/null",
-        main_search_params->dir,
-        main_search_params->file,
-        main_search_params->name_file_temp)
-        >=sizeof(buffer))
-    {
-        printf("Error");
-    } else 
-    {
-        system(buffer);
-    }
+    if(check_library_initalized() == 1)
+        return create_error("libfinder - you haven't specified search parameters");
+
+
+    int buffer_size = 40 + strlen(search_instance->dir) + 
+                strlen(search_instance->file)+
+                strlen(search_instance->name_file_temp);
+
+    char buffer[buffer_size];
+
+    snprintf(buffer, buffer_size, "find %s -name %s > %s 2>/dev/null",
+        search_instance->dir,
+        search_instance->file,
+        search_instance->name_file_temp);
+
+    system(buffer);
+
     return 0;
 }
 
-int search_directory_and_store()
-{
-    if(check_library_initalized() < 0)
+int search_directory_and_store(){
+    if(search_directory() < 0)
         return -1;
-
-    search_directory();
     return store_last_result();
 }
+
 
 int remove_data_block(int index)
 {
     if(check_library_initalized() < 0)
         return -1;
 
-    if(search_results[index] != NULL) 
+    if(search_instance->search_results[index] != NULL) 
     {
-        free(search_results[index]);
-        search_results[index] = NULL;
+        free(search_instance->search_results[index]);
+        search_instance->search_results[index] = NULL;
         return 0;
     }
     fprintf(stderr, "libfinder - there is no datablock with index %d\n", index);
@@ -130,9 +144,12 @@ int remove_data_block(int index)
 
 char* get_data_block(int index) 
 {
-    if(search_results[index] != NULL) 
+    if(check_library_initalized() < 0)
+        return NULL;
+
+    if(search_instance->search_results[index] != NULL) 
     {
-        return search_results[index];
+        return search_instance->search_results[index];
     }
     else {
         fprintf(stderr, "libfinder - there is no datablock with index %d\n", index);
@@ -140,7 +157,23 @@ char* get_data_block(int index)
     }
 }
 
+int clean() 
+{
+    if(check_library_initalized() < 0)
+        return create_error("libfinder - cannot clean uninitalized library");
 
+    for(int i = 0; i < search_instance->search_results_size; i++)
+    {
+        if(search_instance->search_results[i] != NULL) 
+        {
+            free(search_instance->search_results[i]);
+        }
+    }
+    free(search_instance->search_results);
+    free(search_instance);
+
+    return 0;
+}
 
 
 

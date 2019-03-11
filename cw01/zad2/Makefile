@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-Wall
 
-all : test_static
+all : clean_all test_static
 default : all
 
 main_static : main.c reporting.c ../zad1/libfinder.a
