@@ -120,7 +120,7 @@ void stop_report_timer(char* text)
 
     char buffer[255]; 
 
-    sprintf(buffer, "%-20s %9ld %12ld %9.2f %9.2f %9.2f %9.2f\n",
+    sprintf(buffer, "%-20s %9ld %09ld %9.2f %9.2f %9.2f %9.2f\n",
             text,timespec_diff_time.tv_sec, timespec_diff_time.tv_nsec, 
             tms_diff_time.tms_utime / (double) clktck,
             tms_diff_time.tms_stime / (double) clktck,

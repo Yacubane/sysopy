@@ -21,7 +21,7 @@ int init_dynamic()
     void *handle = dlopen("../zad1/libfinder.so", RTLD_LAZY);
     if(!handle)
     {
-        fprintf(stderr, "Cannot load dynamic library");
+        fprintf(stderr, "Cannot load dynamic library\n");
         return -1;
     }
 

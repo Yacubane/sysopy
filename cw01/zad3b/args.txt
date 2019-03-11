@@ -1,5 +1,4 @@
 create_table 100
-start_reporting raport2.txt REPORT_TASK2 0
 
 start_report_timer
 search_directory / "*.h" tmp

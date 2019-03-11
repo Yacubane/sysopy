@@ -25,12 +25,6 @@ test_shared : main_shared
 test_dynamic : main_dynamic
 	./main_dynamic start_reporting $(RESULT_FILE) $(RESULT_NAME) $(APPEND) $$(cat args.txt)
 
-report3a:
-	rm -f results3a.txt
-	for test in test_static test_shared test_dynamic ; do \
-    	make $$test APPEND=1 RESULT_FILE=results3a.txt RESULT_NAME=$$test ; \
-	done
-
 report3b:
 	rm -f results3b.txt
 	for test in test_static test_shared test_dynamic ; do \
@@ -44,6 +38,5 @@ clean:
 	rm -f tmp
 
 clean_all : clean
-	rm -f results3a.txt
 	rm -f results3b.txt
 

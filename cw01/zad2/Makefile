@@ -19,6 +19,9 @@ test_static : main_static
 test_shared : main_shared
 	./main_shared $$(cat args.txt)
 
+test_shared_local : main_shared
+	LD_LIBRARY_PATH=../zad1/ ./main_shared $$(cat args.txt)
+
 test_dynamic : main_dynamic
 	./main_dynamic $$(cat args.txt)
 
