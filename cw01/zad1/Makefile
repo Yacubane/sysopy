@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-Wall
 
-all: clean static_lib add_shared_lib
+all: clean_all static_lib add_shared_lib
 default : all
 
 libfinder.a : finder.c 

@@ -10,7 +10,8 @@ int (*store_last_result_)();
 int (*remove_data_block_)(int index);
 char* (*get_data_block_)(int index);
 
-static int create_error(char* message) {
+static int create_error(char* message) 
+{
     fprintf(stderr, "%s\n", message);
     return -1;
 }
@@ -18,7 +19,8 @@ static int create_error(char* message) {
 int init_dynamic()
 {
     void *handle = dlopen("../zad1/libfinder.so", RTLD_LAZY);
-    if(!handle){
+    if(!handle)
+    {
         fprintf(stderr, "Cannot load dynamic library");
         return -1;
     }
@@ -47,7 +49,8 @@ int init_dynamic()
     return 0;
 }
 
-int create_table(unsigned int table_size) {
+int create_table(unsigned int table_size) 
+{
     return (*create_table_)(table_size);
 }
 int set_search(char *dir, char *file, char *name_file_temp)

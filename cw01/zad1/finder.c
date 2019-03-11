@@ -1,8 +1,8 @@
+#include "finder.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include "finder.h"
 #include <string.h>
 
 struct search_instance_t
@@ -20,7 +20,8 @@ static int library_initalized = 0;
 
 static struct search_instance_t *search_instance;
 
-static int create_error(char* message) {
+static int create_error(char *message)
+{
     fprintf(stderr, "%s\n", message);
     return -1;
 }
@@ -120,7 +121,8 @@ int search_directory()
     return 0;
 }
 
-int search_directory_and_store(){
+int search_directory_and_store()
+{
     if(search_directory() < 0)
         return -1;
     return store_last_result();
@@ -171,6 +173,7 @@ int clean()
     }
     free(search_instance->search_results);
     free(search_instance);
+    library_initalized = 0;
 
     return 0;
 }

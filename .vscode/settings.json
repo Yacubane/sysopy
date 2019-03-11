@@ -7,6 +7,7 @@
         "reporting.h": "c",
         "finder.h": "c",
         "finder_dynamic.h": "c",
-        "bitsperlong.h": "c"
+        "bitsperlong.h": "c",
+        "errno.h": "c"
     }
 }

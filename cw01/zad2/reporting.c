@@ -10,8 +10,8 @@
 static int reporting_status = 0;
 static int fd;
 
-static struct timespec start, stop;
-static struct tms start_tms, stop_tms;
+static struct timespec timespec_start, timespec_stop;
+static struct tms tms_start, tms_stop;
 
 static int create_error(char* message) {
     fprintf(stderr, "%s\n", message);
@@ -104,28 +104,28 @@ struct tms diff_tms(struct tms start, struct tms end) {
 
 void start_report_timer()
 {
-    times(&start_tms);
-    clock_gettime(CLOCK_REALTIME, &start);
+    times(&tms_start);
+    clock_gettime(CLOCK_REALTIME, &timespec_start);
 }
 
 void stop_report_timer(char* text)
 {
-    times(&stop_tms);
-    struct tms diff_time_tms = diff_tms(start_tms, stop_tms);
+    times(&tms_stop);
+    struct tms tms_diff_time = diff_tms(tms_start, tms_stop);
 
-    clock_gettime(CLOCK_REALTIME, &stop);
-    struct timespec diff_time = diff(start, stop);
+    clock_gettime(CLOCK_REALTIME, &timespec_stop);
+    struct timespec timespec_diff_time = diff(timespec_start, timespec_stop);
 
     long clktck = sysconf(_SC_CLK_TCK);
 
     char buffer[255]; 
 
     sprintf(buffer, "%-20s %9ld %12ld %9.2f %9.2f %9.2f %9.2f\n",
-            text,diff_time.tv_sec, diff_time.tv_nsec, 
-            diff_time_tms.tms_utime / (double) clktck,
-            diff_time_tms.tms_stime / (double) clktck,
-            diff_time_tms.tms_cutime / (double) clktck,
-            diff_time_tms.tms_cstime / (double) clktck);
+            text,timespec_diff_time.tv_sec, timespec_diff_time.tv_nsec, 
+            tms_diff_time.tms_utime / (double) clktck,
+            tms_diff_time.tms_stime / (double) clktck,
+            tms_diff_time.tms_cutime / (double) clktck,
+            tms_diff_time.tms_cstime / (double) clktck);
 
     add_report_text(buffer);
 }

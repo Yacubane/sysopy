@@ -1,3 +1,16 @@
+Wyniki z wykonanych testów nie wykazują różnic między szybkością
+działania biblioteki statycznej a współdzielonej/dynamicznej.
+
+Powtarzając wiele razy pomiary uzyskiwane wyniki nieco się różniły,
+co wynika ze sposobu działania systemu operacyjnego i różnego przydzielenia
+czasu procesora. Prawdopodobnie właśnie przez to nie można zauważyć różnic.
+
+Można także zauważyć, że czas procesora w trybie użytkownika/systemu jest
+zwykle zerowy, lub bliski zera. Najdłuższą częścią programu jest wywołanie 
+polecenia find funkcją system(command); oraz operacje na plikach, którę
+generują podproces, dlatego ten czas jest zaliczany dla potomków procesu
+programu (widać to na czasie cutime, cstime).
+
 test_static
 Measurement            Real[s]      Real[n]  utime[s]  stime[s] cutime[s] cstime[s]
 big_search                   3    178610900      0.00      0.00      1.17      1.97

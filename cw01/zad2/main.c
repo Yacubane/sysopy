@@ -9,7 +9,8 @@
     #include "finder.h"
 #endif
 
-static int create_error(char* message) {
+static int create_error(char* message) 
+{
     fprintf(stderr, "%s\n", message);
     return -1;
 }
@@ -142,7 +143,8 @@ int parse_command(int index, int argc, char *argv[])
 int main(int argc, char *argv[])
 {
     #ifdef DYNAMIC
-        if(init_dynamic() < 0){
+        if(init_dynamic() < 0)
+        {
             fprintf(stderr, "Dynamic library loading error, stopping\n");
             exit(1);
         }
