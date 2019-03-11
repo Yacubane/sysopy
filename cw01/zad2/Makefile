@@ -1,27 +1,30 @@
 CC=gcc
 CFLAGS=-Wall
 
-all: 
+all : test_static
+default : all
 
-static : test.c 
-	$(CC) $(CFLAGS) test.c reporting.c ../zad1/libfinder.a -I../zad1/ -o test
+main_static : main.c reporting.c ../zad1/libfinder.a
+	$(CC) $(CFLAGS) main.c reporting.c ../zad1/libfinder.a -I../zad1/ -o main_static
 
-shared : test.c
-	$(CC) $(CFLAGS) test.c reporting.c -L../zad1/ -I../zad1/ -lfinder -o test
+main_shared : main.c reporting.c ../zad1/libfinder.so
+	$(CC) $(CFLAGS) main.c reporting.c -L../zad1/ -I../zad1/ -lfinder -o main_shared
 
-dynamic : test.c 
-	$(CC) $(CFLAGS) test.c reporting.c finder_dynamic.c -ldl -D DYNAMIC -o test
+main_dynamic : main.c reporting.c ../zad1/libfinder.so
+	$(CC) $(CFLAGS) main.c reporting.c finder_dynamic.c -ldl -D DYNAMIC -o main_dynamic
 
-test_static : static
-	./test $$(cat test2.txt)
+test_static : main_static
+	./main_static $$(cat args.txt)
 
-test_shared : shared
-	./test $$(cat test2.txt)
+test_shared : main_shared
+	./main_shared $$(cat args.txt)
 
-test_dynamic : dynamic
-	./test $$(cat test2.txt)
+test_dynamic : main_dynamic
+	./main_dynamic $$(cat args.txt)
 
-clean:
-	rm -f *.o
-	rm -f *.a
-	rm -f *.so*
+clean :
+	rm -f main_*
+	rm -f tmp
+
+clean_all : clean
+	rm -f raport2.txt

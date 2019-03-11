@@ -1,6 +1,6 @@
 #pragma once
 
-int start_reporting(char* filename);
+int start_reporting(char* filename, char* title, int flag);
 int add_report_text(char* content);
 int stop_reporting();
 

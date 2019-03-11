@@ -1,4 +1,0 @@
-Measurement            Real[s]      Real[n]  utime[s]  stime[s] cutime[s] cstime[s]
-big_search                   3     99751563      0.00      0.00      1.09      1.97
-medium_search                0    852249299      0.00      0.00      0.30      0.52
-small_search                 0     85659658      0.00      0.00      0.04      0.04

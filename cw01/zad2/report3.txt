@@ -1,2 +1,0 @@
-Measurement            Real[s]      Real[n]  utime  stime cutime cstime
-weird_test                   0     79118094      0      0      4      3

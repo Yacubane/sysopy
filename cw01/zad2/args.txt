@@ -1,0 +1,55 @@
+create_table 100
+start_reporting raport2.txt REPORT_TASK2 0
+
+start_report_timer
+search_directory / "*.h" tmp
+stop_report_timer big_search
+
+start_report_timer
+search_directory /usr "*.h" tmp
+stop_report_timer medium_search
+
+start_report_timer
+search_directory /usr/lib "*.h" tmp
+stop_report_timer small_search
+
+search_directory / "*.h" tmp
+start_report_timer
+store_last_result
+stop_report_timer big_store
+
+search_directory /usr "*.h" tmp
+start_report_timer
+store_last_result
+stop_report_timer medium_store
+
+search_directory /usr/lib "*.h" tmp
+start_report_timer
+store_last_result
+stop_report_timer small_store
+
+start_report_timer
+remove_data_block 0
+stop_report_timer big_data_delete
+
+start_report_timer
+remove_data_block 1
+stop_report_timer medium_data_delete
+
+start_report_timer
+remove_data_block 2
+stop_report_timer small_data_delete
+
+start_report_timer
+search_directory / "*.h" tmp
+store_last_result
+remove_data_block 0
+search_directory /usr "*.h" tmp
+store_last_result
+remove_data_block 0
+search_directory /usr/lib "*.h" tmp
+store_last_result
+remove_data_block 0
+stop_report_timer data_block_test
+
+stop_reporting

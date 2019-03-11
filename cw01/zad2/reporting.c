@@ -8,6 +8,7 @@
 #include <time.h>
 #include <sys/times.h>
 
+
 static int reporting_status = 0;
 static int fd;
 
@@ -19,19 +20,36 @@ static int create_error(char* message) {
     return -1;
 }
 
-int start_reporting(char* filename)
+int start_reporting(char* filename, char* title, int flag)
 {
     if(reporting_status==1)
         return create_error("Reporting is already started");
-    
 
-    if((fd = creat(filename, 0644)) >= 0) 
+    int realFlag = 0;
+    if(flag == 1)
+        realFlag = O_APPEND;
+    else
+        realFlag = O_TRUNC;
+
+    if((fd = open(filename, O_WRONLY | O_CREAT | realFlag, 0644)) >= 0) 
     {
+        char buffer[255]; 
+
         reporting_status = 1;
+
+        sprintf(buffer, "%s\n", title);
+        if(add_report_text(buffer) < 0) 
+            return create_error("Cannot add first line to report");
+
+        sprintf(buffer, "%-20s %9s %12s %9s %9s %9s %9s\n",
+                "Measurement", "Real[s]", "Real[n]", 
+                "utime[s]", "stime[s]", "cutime[s]", "cstime[s]");
+        if(add_report_text(buffer) < 0)
+            return create_error("Cannot add second line to report");
+
         return 0;
     } else
-        return create_error("Cannot create report file");
-    
+        return create_error("Cannot create report file");   
 }
 
 int add_report_text(char* content) {
@@ -53,6 +71,8 @@ int add_report_text(char* content) {
 int stop_reporting() {
     if(reporting_status==0)
         return create_error("Reporting is already stopped");
+
+    add_report_text("\n");
 
     reporting_status = 0;
     close(fd);
@@ -108,17 +128,6 @@ void stop_report_timer(char* text)
             diff_time_tms.tms_stime / (double) clktck,
             diff_time_tms.tms_cutime / (double) clktck,
             diff_time_tms.tms_cstime / (double) clktck);
-
-    add_report_text(buffer);
-}
-
-void add_first_reporting_line()
-{
-    char buffer[255]; 
-
-    sprintf(buffer, "%-20s %9s %12s %9s %9s %9s %9s\n",
-            "Measurement", "Real[s]", "Real[n]", 
-            "utime[s]", "stime[s]", "cutime[s]", "cstime[s]");
 
     add_report_text(buffer);
 }
