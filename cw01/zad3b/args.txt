@@ -46,7 +46,6 @@ remove_data_block 0
 store_last_result
 remove_data_block 0
 store_last_result
-get_data_block 0
 remove_data_block 0
 stop_report_timer data_block_test
 

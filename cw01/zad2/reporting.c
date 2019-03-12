@@ -88,10 +88,10 @@ int stop_reporting() {
 struct timespec timespec_diff(struct timespec start, struct timespec stop)
 {
 	struct timespec temp;
-	if ((stop.tv_nsec-start.tv_nsec)<0) 
+	if ((stop.tv_nsec-start.tv_nsec) < 0) 
     {
 		temp.tv_sec = stop.tv_sec - start.tv_sec - 1;
-		temp.tv_nsec = 1000000000 + stop.tv_nsec-start.tv_nsec;
+		temp.tv_nsec = 1000000000 + stop.tv_nsec - start.tv_nsec;
 	} else 
     {
 		temp.tv_sec = stop.tv_sec - start.tv_sec;

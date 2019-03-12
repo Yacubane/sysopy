@@ -18,7 +18,7 @@ static int create_error(char* message)
 int check_argument_size(int index, int arguments_length, int argc)
 {
     if(index + arguments_length >= argc) {
-        fprintf(stderr, "Wrong number of arguments");
+        fprintf(stderr, "Wrong number of arguments\n");
         return -1;
     }
     return 0;
@@ -134,7 +134,7 @@ int parse_command(int index, int argc, char *argv[])
     }  
     else
     {
-        fprintf(stderr, "Error parsing %s - undefined command", argv[index]);
+        fprintf(stderr, "Error parsing %s - undefined command\n", argv[index]);
         return -1;
     }
     
