@@ -1,4 +1,4 @@
-all : clean_al
+all : clean_all
 	make -C ./zad1/ all
 	make -C ./zad2/ all
 	make -C ./zad3a/ all

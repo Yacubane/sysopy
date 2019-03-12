@@ -4,7 +4,7 @@ APPEND=0
 RESULT_FILE=results.txt
 RESULT_NAME=TEST
 
-all: clean_all report3a report3b
+all: clean_all report3a
 default : all
 
 main_static : ../zad2/main.c  ../zad2/reporting.c ../zad1/libfinder.a
@@ -26,15 +26,15 @@ test_dynamic : main_dynamic
 	./main_dynamic start_reporting $(RESULT_FILE) $(RESULT_NAME) $(APPEND) $$(cat args.txt)
 
 report3a:
-	rm -f results3a.txt
+	rm -f results3a_gen.txt
 	for test in test_static test_shared test_dynamic ; do \
-    	make $$test APPEND=1 RESULT_FILE=results3a.txt RESULT_NAME=$$test ; \
+    	make $$test APPEND=1 RESULT_FILE=results3a_gen.txt RESULT_NAME=$$test ; \
 	done
 
 clean:
 	rm -f main*
 	rm -f tmp
+	rm -f results3a_gen.txt
 
 clean_all : clean
-	rm -f results3a.txt
 

@@ -12,7 +12,7 @@ struct search_instance_t
     char *name_file_temp;
 
     char **search_results;
-    int search_results_size;
+    unsigned int search_results_size;
 
 };
 
@@ -61,6 +61,31 @@ int set_search(char *dir, char *file, char *name_file_temp)
     return 0;
 }
 
+int search_directory()
+{
+    if(check_library_initalized() < 0)
+        return -1;
+
+    if(check_library_initalized() == 1)
+        return create_error("libfinder - you haven't specified search parameters");
+
+
+    int buffer_size = 40 + strlen(search_instance->dir) + 
+                strlen(search_instance->file)+
+                strlen(search_instance->name_file_temp);
+
+    char buffer[buffer_size];
+
+    snprintf(buffer, buffer_size, "find %s -name %s > %s 2>/dev/null",
+        search_instance->dir,
+        search_instance->file,
+        search_instance->name_file_temp);
+
+    system(buffer);
+
+    return 0;
+}
+
 int store_last_result()
 {
     if(check_library_initalized() < 0)
@@ -94,31 +119,6 @@ int store_last_result()
         }
     }
     return create_error("libfinder - cannot add more new data blocks");
-}
-
-int search_directory()
-{
-    if(check_library_initalized() < 0)
-        return -1;
-
-    if(check_library_initalized() == 1)
-        return create_error("libfinder - you haven't specified search parameters");
-
-
-    int buffer_size = 40 + strlen(search_instance->dir) + 
-                strlen(search_instance->file)+
-                strlen(search_instance->name_file_temp);
-
-    char buffer[buffer_size];
-
-    snprintf(buffer, buffer_size, "find %s -name %s > %s 2>/dev/null",
-        search_instance->dir,
-        search_instance->file,
-        search_instance->name_file_temp);
-
-    system(buffer);
-
-    return 0;
 }
 
 int search_directory_and_store()

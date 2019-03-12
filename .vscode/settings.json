@@ -8,6 +8,7 @@
         "finder.h": "c",
         "finder_dynamic.h": "c",
         "bitsperlong.h": "c",
-        "errno.h": "c"
+        "errno.h": "c",
+        "stdlib.h": "c"
     }
 }

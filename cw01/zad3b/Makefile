@@ -4,7 +4,7 @@ APPEND=0
 RESULT_FILE=results.txt
 RESULT_NAME=TEST
 
-all: clean_all report3a report3b
+all: clean_all report3b
 default : all
 
 main_static : ../zad2/main.c  ../zad2/reporting.c ../zad1/libfinder.a
@@ -26,17 +26,17 @@ test_dynamic : main_dynamic
 	./main_dynamic start_reporting $(RESULT_FILE) $(RESULT_NAME) $(APPEND) $$(cat args.txt)
 
 report3b:
-	rm -f results3b.txt
+	rm -f results3b_gen.txt
 	for test in test_static test_shared test_dynamic ; do \
 		for optimization in 0 1 2 3 s ; do \
-    		make $$test APPEND=1 O=$$optimization RESULT_FILE=results3b.txt RESULT_NAME=$$test""_optimize-O""$$optimization""  ; \
+    		make $$test APPEND=1 O=$$optimization RESULT_FILE=results3b_gen.txt RESULT_NAME=$$test""_optimize-O""$$optimization""  ; \
 		done ; \
 	done
 
 clean:
 	rm -f main*
 	rm -f tmp
+	rm -f results3b_gen.txt
 
 clean_all : clean
-	rm -f results3b.txt
 

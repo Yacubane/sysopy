@@ -39,7 +39,7 @@ int start_reporting(char* filename, char* title, int append)
         if(add_report_text(buffer) < 0) 
             return create_error("Cannot add first line to report");
 
-        sprintf(buffer, "%-20s %9s %12s %9s %9s %9s %9s\n",
+        sprintf(buffer, "%-20s %9s %9s %9s %9s %9s %9s\n",
                 "Measurement", "Real[s]", "Real[n]", 
                 "utime[s]", "stime[s]", "cutime[s]", "cstime[s]");
         if(add_report_text(buffer) < 0)

@@ -1,52 +1,52 @@
-Wyniki z wykonanych testów nie wykazują różnic między szybkością
-działania biblioteki statycznej a współdzielonej/dynamicznej.
+Wyniki z wykonanych testow nie wykazuja roznic miedzy szybkoscia
+dzialania biblioteki statycznej a wspoldzielonej/dynamicznej.
 
-Powtarzając wiele razy pomiary uzyskiwane wyniki nieco się różniły,
-co wynika ze sposobu działania systemu operacyjnego i różnego przydzielenia
-czasu procesora. Prawdopodobnie właśnie przez to nie można zauważyć różnic.
+Powtarzajac wiele razy pomiary uzyskiwane wyniki nieco sie roznily,
+co wynika ze sposobu dzialania systemu operacyjnego i roznego przydzielenia
+czasu procesora. Prawdopodobnie wlasnie przez to nie mozna zauwazyc roznic.
 
-Można także zauważyć, że czas procesora w trybie użytkownika/systemu jest
-zwykle zerowy, lub bliski zera. Najdłuższą częścią programu jest wywołanie 
-polecenia find funkcją system(command); oraz operacje na plikach, którę
-generują podproces, dlatego ten czas jest zaliczany dla potomków procesu
-programu (widać to na czasie cutime, cstime).
+Mozna takze zauwazyc, ze czas procesora w trybie uzytkownika/systemu jest
+zwykle zerowy, lub bliski zera. Najdluzsza czescia programu jest wywolanie 
+polecenia find funkcja system(command); oraz operacje na plikach, ktore
+generuja podproces, dlatego ten czas jest zaliczany dla potomkow procesu
+programu (widac to na czasie cutime, cstime).
 
 test_static
 Measurement            Real[s]   Real[n]  utime[s]  stime[s] cutime[s] cstime[s]
-big_search                   3 227711945      0.00      0.00      1.20      1.98
-medium_search                0 806408933      0.00      0.00      0.33      0.47
-small_search                 0 069256523      0.00      0.00      0.03      0.03
-big_store                    0 064121950      0.00      0.06      0.00      0.00
-medium_store                 0 009147102      0.00      0.01      0.00      0.00
-small_store                  0 000889650      0.00      0.00      0.00      0.00
-big_data_delete              0 004234689      0.00      0.01      0.00      0.00
-medium_data_delete           0 000887509      0.00      0.00      0.00      0.00
-small_data_delete            0 000090321      0.00      0.00      0.00      0.00
-data_block_test              0 165882023      0.00      0.17      0.00      0.00
+big_search                   3 043935145      0.00      0.00      1.14      1.88
+medium_search                0 798825249      0.00      0.00      0.31      0.47
+small_search                 0 070550614      0.00      0.00      0.03      0.04
+big_store                    0 038127723      0.00      0.03      0.00      0.00
+medium_store                 0 008301826      0.00      0.01      0.00      0.00
+small_store                  0 000924769      0.00      0.00      0.00      0.00
+big_data_delete              0 002721515      0.00      0.00      0.00      0.00
+medium_data_delete           0 000606989      0.00      0.00      0.00      0.00
+small_data_delete            0 000071612      0.00      0.00      0.00      0.00
+data_block_test              0 170059212      0.00      0.16      0.00      0.00
 
 test_shared
 Measurement            Real[s]   Real[n]  utime[s]  stime[s] cutime[s] cstime[s]
-big_search                   3 243242232      0.00      0.00      1.13      2.07
-medium_search                0 820486638      0.00      0.00      0.30      0.50
-small_search                 0 069156941      0.00      0.00      0.02      0.04
-big_store                    0 060959503      0.00      0.06      0.00      0.00
-medium_store                 0 009178435      0.00      0.01      0.00      0.00
-small_store                  0 000912061      0.00      0.00      0.00      0.00
-big_data_delete              0 004239151      0.00      0.00      0.00      0.00
-medium_data_delete           0 000902368      0.00      0.00      0.00      0.00
-small_data_delete            0 000095025      0.00      0.00      0.00      0.00
-data_block_test              0 165734189      0.00      0.17      0.00      0.00
+big_search                   3 069949203      0.00      0.00      1.18      1.86
+medium_search                0 805080595      0.00      0.00      0.27      0.51
+small_search                 0 072382455      0.00      0.00      0.04      0.03
+big_store                    0 042813806      0.00      0.04      0.00      0.00
+medium_store                 0 008548613      0.00      0.01      0.00      0.00
+small_store                  0 000882062      0.00      0.00      0.00      0.00
+big_data_delete              0 003542275      0.00      0.00      0.00      0.00
+medium_data_delete           0 000599346      0.00      0.00      0.00      0.00
+small_data_delete            0 000070979      0.00      0.00      0.00      0.00
+data_block_test              0 129570350      0.00      0.13      0.00      0.00
 
 test_dynamic
 Measurement            Real[s]   Real[n]  utime[s]  stime[s] cutime[s] cstime[s]
-big_search                   3 223708338      0.00      0.00      1.20      1.98
-medium_search                0 805021653      0.00      0.00      0.31      0.48
-small_search                 0 071415467      0.00      0.00      0.03      0.04
-big_store                    0 062717002      0.00      0.06      0.00      0.00
-medium_store                 0 021250801      0.00      0.02      0.00      0.00
-small_store                  0 000909664      0.00      0.00      0.00      0.00
-big_data_delete              0 004209193      0.00      0.01      0.00      0.00
-medium_data_delete           0 000886682      0.00      0.00      0.00      0.00
-small_data_delete            0 000091070      0.00      0.00      0.00      0.00
-data_block_test              0 166298841      0.00      0.16      0.00      0.00
+big_search                   3 063460997      0.00      0.00      1.06      1.96
+medium_search                0 789957368      0.00      0.00      0.30      0.48
+small_search                 0 077504526      0.00      0.00      0.02      0.05
+big_store                    0 038870419      0.00      0.03      0.00      0.00
+medium_store                 0 008422225      0.00      0.00      0.00      0.00
+small_store                  0 000907551      0.00      0.01      0.00      0.00
+big_data_delete              0 003714881      0.00      0.00      0.00      0.00
+medium_data_delete           0 000743957      0.00      0.00      0.00      0.00
+small_data_delete            0 000089017      0.00      0.00      0.00      0.00
+data_block_test              0 129688396      0.00      0.13      0.00      0.00
 
