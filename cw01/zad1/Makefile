@@ -28,8 +28,8 @@ add_shared_lib : /usr/lib/libfinder.so
 
 clean :
 	rm -f *.o
-
-clean_all : clean
 	rm -f *.a
 	rm -f *.so*
 	sudo rm -f /usr/lib/libfinder*
+
+clean_all : clean
