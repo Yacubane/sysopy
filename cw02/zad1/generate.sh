@@ -3,7 +3,7 @@ rm -f wyniki_gen.txt
 touch wyniki_gen.txt
 
 record_size=(1 1 4 4 512 512 1024 1024 4096 4096 8192 8192)
-record_num=(2000 2000 2000 2000 2000 2000 2000 2000 2000 2000 2000 2000)
+record_num=(3000 3000 3000 3000 3000 3000 3000 3000 3000 3000 3000 3000)
 for index in ${!record_size[*]}
 do
     ./main generate data ${record_num[$index]} ${record_size[$index]} > tmp

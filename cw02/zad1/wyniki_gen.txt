@@ -1,0 +1,120 @@
+Test 3000 rekordów o rozmiarze 1
+Test kopiowania - funkcje systemowe
+        0 011292191      0.00      0.01      0.00      0.00
+Test kopiowania - biblioteka C
+        0 002269887      0.00      0.00      0.00      0.00
+Test sortowania - funkcje systemowe
+        3 971279256      1.02      2.94      0.00      0.00
+Test sortowania - biblioteka C
+        1 743516586      0.71      1.03      0.00      0.00
+
+Test 3000 rekordów o rozmiarze 1
+Test kopiowania - funkcje systemowe
+        0 007898749      0.00      0.00      0.00      0.00
+Test kopiowania - biblioteka C
+        0 000169239      0.00      0.00      0.00      0.00
+Test sortowania - funkcje systemowe
+        3 982297315      1.07      2.90      0.00      0.00
+Test sortowania - biblioteka C
+        1 708625627      0.78      0.92      0.00      0.00
+
+Test 3000 rekordów o rozmiarze 4
+Test kopiowania - funkcje systemowe
+        0 007529471      0.00      0.00      0.00      0.00
+Test kopiowania - biblioteka C
+        0 000172361      0.00      0.00      0.00      0.00
+Test sortowania - funkcje systemowe
+        4 043517472      1.09      2.94      0.00      0.00
+Test sortowania - biblioteka C
+        1 764365414      0.74      0.99      0.00      0.00
+
+Test 3000 rekordów o rozmiarze 4
+Test kopiowania - funkcje systemowe
+        0 007672032      0.00      0.00      0.00      0.00
+Test kopiowania - biblioteka C
+        0 000172076      0.00      0.00      0.00      0.00
+Test sortowania - funkcje systemowe
+        4 101392466      1.16      2.88      0.00      0.00
+Test sortowania - biblioteka C
+        1 765591534      0.78      0.95      0.00      0.00
+
+Test 3000 rekordów o rozmiarze 512
+Test kopiowania - funkcje systemowe
+        0 009235541      0.00      0.00      0.00      0.00
+Test kopiowania - biblioteka C
+        0 002797631      0.00      0.00      0.00      0.00
+Test sortowania - funkcje systemowe
+        4 227130994      1.24      2.92      0.00      0.00
+Test sortowania - biblioteka C
+        2 203986323      0.85      1.32      0.00      0.00
+
+Test 3000 rekordów o rozmiarze 512
+Test kopiowania - funkcje systemowe
+        0 009276058      0.00      0.00      0.00      0.00
+Test kopiowania - biblioteka C
+        0 002945235      0.00      0.00      0.00      0.00
+Test sortowania - funkcje systemowe
+        4 226616681      1.11      3.11      0.00      0.00
+Test sortowania - biblioteka C
+        2 215387960      0.83      1.37      0.00      0.00
+
+Test 3000 rekordów o rozmiarze 1024
+Test kopiowania - funkcje systemowe
+        0 015170457      0.00      0.01      0.00      0.00
+Test kopiowania - biblioteka C
+        0 018633484      0.00      0.00      0.00      0.00
+Test sortowania - funkcje systemowe
+        4 455373936      1.18      3.26      0.00      0.00
+Test sortowania - biblioteka C
+        2 856263620      0.90      1.94      0.00      0.00
+
+Test 3000 rekordów o rozmiarze 1024
+Test kopiowania - funkcje systemowe
+        0 011758059      0.00      0.00      0.00      0.00
+Test kopiowania - biblioteka C
+        0 006410811      0.00      0.00      0.00      0.00
+Test sortowania - funkcje systemowe
+        4 322875168      1.13      3.18      0.00      0.00
+Test sortowania - biblioteka C
+        2 937460710      0.99      1.91      0.00      0.00
+
+Test 3000 rekordów o rozmiarze 4096
+Test kopiowania - funkcje systemowe
+        0 027610639      0.00      0.01      0.00      0.00
+Test kopiowania - biblioteka C
+        0 030868372      0.00      0.01      0.00      0.00
+Test sortowania - funkcje systemowe
+        4 542810982      1.04      3.48      0.00      0.00
+Test sortowania - biblioteka C
+        6 159611292      1.55      4.58      0.00      0.00
+
+Test 3000 rekordów o rozmiarze 4096
+Test kopiowania - funkcje systemowe
+        0 031121403      0.00      0.01      0.00      0.00
+Test kopiowania - biblioteka C
+        0 029461223      0.00      0.01      0.00      0.00
+Test sortowania - funkcje systemowe
+        4 539373503      1.11      3.40      0.00      0.00
+Test sortowania - biblioteka C
+        6 041286688      1.50      4.52      0.00      0.00
+
+Test 3000 rekordów o rozmiarze 8192
+Test kopiowania - funkcje systemowe
+        0 058448744      0.00      0.02      0.00      0.00
+Test kopiowania - biblioteka C
+        0 062917407      0.00      0.03      0.00      0.00
+Test sortowania - funkcje systemowe
+        4 634780985      1.07      3.55      0.00      0.00
+Test sortowania - biblioteka C
+        6 111279752      1.52      4.57      0.00      0.00
+
+Test 3000 rekordów o rozmiarze 8192
+Test kopiowania - funkcje systemowe
+        0 062465527      0.00      0.02      0.00      0.00
+Test kopiowania - biblioteka C
+        0 068143539      0.00      0.03      0.00      0.00
+Test sortowania - funkcje systemowe
+        4 660374658      1.10      3.52      0.00      0.00
+Test sortowania - biblioteka C
+        6 089108663      1.36      4.72      0.00      0.00
+

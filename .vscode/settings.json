@@ -13,6 +13,7 @@
         "files.h": "c",
         "limits.h": "c",
         "climits": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "files_dir.h": "c"
     }
 }

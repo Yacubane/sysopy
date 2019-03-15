@@ -5,7 +5,6 @@
 #include "files.h"
 #include <limits.h>
 
-
 static int create_error(char* message) 
 {
     fprintf(stderr, "%s\n", message);
