@@ -3,12 +3,13 @@ CFLAGS = -Wall
 
 all : main
 default : all
+.PHONY : test
 
 main : main.c files.c reporting.c
 	$(CC) $(CFLAGS) main.c files.c reporting.c -o main
 
-generate : main
-	./generate.sh
+test : main
+	./test.sh
 
 clean :
 	rm -f data*

@@ -35,8 +35,6 @@ int generate(char* filename, int record_num, int record_size)
             for(int i = 0; i < record_size; i++) 
             {
                 buffer[i] = rand() % 127;
-                #warning ("Delete")
-                //buffer[i] =  'A' + (rand() % 26);
             }
             if(write(fd, buffer, record_size) != record_size) 
                 return create_error_and_close(fd, "files - error during writing to file");

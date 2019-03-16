@@ -1,6 +1,8 @@
 CC = gcc
 CFLAGS = -Wall
 
+.PHONY: test
+
 all : main_dir main_nftw
 default : all
 
@@ -10,9 +12,12 @@ main_dir : main.c files_dir.c
 main_nftw : main.c files_nftw.c
 	$(CC) $(CFLAGS) main.c files_nftw.c -o main_nftw
 
-test : main_dir main_nftw
-	./main_dir $$(cat args.txt)
-	./main_nftw $$(cat args.txt)
+test_files :
+	./generate_files.sh
 
+test : test_files main_dir main_nftw
+	./test.sh
+	
 clean :
 	rm -f main_*
+	rm -rf test_files
