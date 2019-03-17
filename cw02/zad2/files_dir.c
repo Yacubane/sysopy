@@ -93,6 +93,7 @@ int view_dir(char *path, int sign, time_t time)
 
     if(chdir(path) != 0) return create_error("Cannot change directory to choosen path");
     readdir_recursive(stat_buffer, 255, sign, time);
+    free(stat_buffer);
     return 0;
 }
 

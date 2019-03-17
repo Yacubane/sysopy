@@ -14,6 +14,7 @@
         "limits.h": "c",
         "climits": "c",
         "string.h": "c",
-        "files_dir.h": "c"
+        "files_dir.h": "c",
+        "stdio.h": "c"
     }
 }

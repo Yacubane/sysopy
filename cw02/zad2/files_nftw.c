@@ -68,21 +68,28 @@ int view_dir(char *path, int sign_s, time_t time_s)
 {
     char* abosolute_path = malloc(1024*sizeof(char));
 
-    if (!realpath(path, abosolute_path))
+    if (!realpath(path, abosolute_path)) 
+    {
+        free(abosolute_path);
         return create_error("Cannot get real path");
+    }
 
     count = 0;
     time_ = time_s;
     sign_ = sign_s;
     if(sign_s < -1 || sign_s > 1)
+    {
+        free(abosolute_path);
         return create_error("Wrong sign");
+    }
 
-    if (nftw(abosolute_path, fn, 1000000, FTW_PHYS) == -1) {
+    if (nftw(abosolute_path, fn, 1000000, FTW_PHYS) == -1) 
+    {
+        free(abosolute_path);
         return create_error("nftw error");
     }
 
     free(abosolute_path);
-
     return 0;
 }
 
