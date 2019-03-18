@@ -8,83 +8,83 @@ Test 3000 rekordów o rozmiarze 1
 measurement  utime[s]  stime[s]
    copy sys     0.00      0.00
    copy lib     0.00      0.00
-   sort sys     1.10      2.88
-   sort lib     0.64      1.11
+   sort sys     1.09      2.87
+   sort lib     0.79      0.96
 
-Test 3000 rekordów o rozmiarze 1
-measurement  utime[s]  stime[s]
-   copy sys     0.00      0.00
-   copy lib     0.00      0.00
-   sort sys     1.13      2.89
-   sort lib     0.72      0.99
-
-Test 3000 rekordów o rozmiarze 4
-measurement  utime[s]  stime[s]
-   copy sys     0.00      0.00
-   copy lib     0.00      0.00
-   sort sys     1.13      3.02
-   sort lib     0.75      1.01
-
-Test 3000 rekordów o rozmiarze 4
-measurement  utime[s]  stime[s]
-   copy sys     0.00      0.00
-   copy lib     0.00      0.00
-   sort sys     1.07      3.01
-   sort lib     0.81      0.91
-
-Test 3000 rekordów o rozmiarze 512
-measurement  utime[s]  stime[s]
-   copy sys     0.00      0.00
-   copy lib     0.00      0.00
-   sort sys     1.07      3.29
-   sort lib     0.85      1.42
-
-Test 3000 rekordów o rozmiarze 512
-measurement  utime[s]  stime[s]
-   copy sys     0.00      0.00
-   copy lib     0.00      0.00
-   sort sys     1.21      3.19
-   sort lib     0.89      1.37
-
-Test 3000 rekordów o rozmiarze 1024
-measurement  utime[s]  stime[s]
-   copy sys     0.00      0.00
-   copy lib     0.00      0.00
-   sort sys     1.08      3.31
-   sort lib     0.75      2.08
-
-Test 3000 rekordów o rozmiarze 1024
-measurement  utime[s]  stime[s]
-   copy sys     0.00      0.01
-   copy lib     0.00      0.00
-   sort sys     1.09      3.55
-   sort lib     1.00      1.96
-
-Test 3000 rekordów o rozmiarze 4096
-measurement  utime[s]  stime[s]
-   copy sys     0.00      0.01
-   copy lib     0.00      0.01
-   sort sys     1.15      3.39
-   sort lib     1.52      4.90
-
-Test 3000 rekordów o rozmiarze 4096
-measurement  utime[s]  stime[s]
-   copy sys     0.00      0.01
-   copy lib     0.00      0.01
-   sort sys     1.13      3.45
-   sort lib     1.50      4.82
-
-Test 3000 rekordów o rozmiarze 8192
+Test 10000 rekordów o rozmiarze 1
 measurement  utime[s]  stime[s]
    copy sys     0.00      0.02
-   copy lib     0.00      0.03
-   sort sys     1.09      3.73
-   sort lib     1.43      4.76
+   copy lib     0.00      0.00
+   sort sys    12.36     32.12
+   sort lib     8.01     11.05
+
+Test 3000 rekordów o rozmiarze 4
+measurement  utime[s]  stime[s]
+   copy sys     0.00      0.00
+   copy lib     0.00      0.00
+   sort sys     1.04      2.99
+   sort lib     0.69      1.03
+
+Test 10000 rekordów o rozmiarze 4
+measurement  utime[s]  stime[s]
+   copy sys     0.00      0.02
+   copy lib     0.00      0.00
+   sort sys    12.31     32.27
+   sort lib     8.35     10.75
+
+Test 3000 rekordów o rozmiarze 512
+measurement  utime[s]  stime[s]
+   copy sys     0.00      0.00
+   copy lib     0.00      0.00
+   sort sys     1.17      2.99
+   sort lib     0.88      1.30
+
+Test 10000 rekordów o rozmiarze 512
+measurement  utime[s]  stime[s]
+   copy sys     0.00      0.02
+   copy lib     0.00      0.00
+   sort sys    11.81     36.14
+   sort lib     9.52     15.73
+
+Test 3000 rekordów o rozmiarze 1024
+measurement  utime[s]  stime[s]
+   copy sys     0.00      0.00
+   copy lib     0.00      0.00
+   sort sys     1.03      3.35
+   sort lib     0.89      1.86
+
+Test 10000 rekordów o rozmiarze 1024
+measurement  utime[s]  stime[s]
+   copy sys     0.00      0.03
+   copy lib     0.00      0.01
+   sort sys    11.92     37.33
+   sort lib    10.30     21.13
+
+Test 3000 rekordów o rozmiarze 4096
+measurement  utime[s]  stime[s]
+   copy sys     0.00      0.01
+   copy lib     0.00      0.02
+   sort sys     1.15      3.51
+   sort lib     1.43      4.61
+
+Test 10000 rekordów o rozmiarze 4096
+measurement  utime[s]  stime[s]
+   copy sys     0.00      0.09
+   copy lib     0.00      0.04
+   sort sys    12.22     38.31
+   sort lib    14.90     51.32
 
 Test 3000 rekordów o rozmiarze 8192
 measurement  utime[s]  stime[s]
    copy sys     0.00      0.03
-   copy lib     0.00      0.02
-   sort sys     1.11      3.61
-   sort lib     1.38      5.01
+   copy lib     0.00      0.07
+   sort sys     1.17      3.36
+   sort lib     1.45      4.60
+
+Test 10000 rekordów o rozmiarze 8192
+measurement  utime[s]  stime[s]
+   copy sys     0.00      0.19
+   copy lib     0.02      0.15
+   sort sys    11.98     38.80
+   sort lib    15.60     50.05
 

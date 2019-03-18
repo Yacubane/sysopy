@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "files.h"
 #include <limits.h>
+#include <time.h>
 
 static int create_error(char* message) 
 {
@@ -26,6 +27,7 @@ static int create_error_and_closef(FILE* fd, char* message)
 
 int generate(char* filename, int record_num, int record_size)
 {
+    srand(time(NULL));
     int fd;
     if((fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0644)) >= 0) 
     {
