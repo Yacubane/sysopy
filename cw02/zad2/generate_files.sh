@@ -11,6 +11,7 @@ touch -t 201601011200 test_files/home/lib/libdroid-1.2.so.0
 ln -s ../../../test_files/home/lib/libdroid-1.2.so.0 test_files/usr/lib/libdroid-1.2.so.0
 mkdir test_files/home/documents/
 touch test_files/home/documents/homework.txt
+ln -s ../../../../test_files/home/lib/ test_files/home/documents/lib
 echo 'Hello, sysops.' > test_files/home/documents/hello_world.txt
 echo 'Stay Hungry. Stay Foolish.' > test_files/home/documents/quotes.txt
 echo 'To be is to be perceived.' > test_files/home/documents/quotes2.txt
