@@ -15,6 +15,9 @@
         "climits": "c",
         "string.h": "c",
         "files_dir.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "types.h": "c",
+        "wait.h": "c",
+        "stat.h": "c"
     }
 }
