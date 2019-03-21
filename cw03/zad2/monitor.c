@@ -63,7 +63,7 @@ int save_file(const char *name, const char *file_content, struct stat *stat_buff
         return -1;
     }
     fclose(fd);
-
+    return 0;
 }
 
 int fork_job(char* path, int refresh_seconds, int monitor_seconds, int type)
