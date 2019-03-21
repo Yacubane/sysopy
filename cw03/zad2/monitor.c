@@ -28,7 +28,7 @@ static int create_error_and_close(FILE *file, char *message)
 char* load_file(const char *path)
 {
     FILE* fd;
-    if((fd = fopen(path, "r")) == NULL)
+    if ((fd = fopen(path, "r")) == NULL)
         return create_error_null("Cannot read file");
 
     int size;
@@ -36,7 +36,7 @@ char* load_file(const char *path)
     size = ftell(fd);
     fseek(fd, 0, SEEK_SET);
     char *file_buffer = calloc(size, sizeof(char));
-    if(fread(file_buffer, 1, size, fd) < 0){
+    if (fread(file_buffer, 1, size, fd) < 0) {
         fclose(fd);
         return create_error_null("Cannot read file");
     }
@@ -53,12 +53,11 @@ int save_file(const char *name, const char *file_content, struct stat *stat_buff
     snprintf(path, 255, "%s/%s_%s", "archiwum", name, mtime_buffer);
 
     FILE* fd;
-    if((fd = fopen(path, "w+")) == NULL)
+    if ((fd = fopen(path, "w+")) == NULL)
         return -1;
     
     int length = strlen(file_content);
-    if(fwrite(file_content, 1, length, fd) != length)
-    {
+    if (fwrite(file_content, 1, length, fd) != length) {
         fclose(fd);
         return -1;
     }
@@ -70,22 +69,19 @@ int fork_job(char* path, int refresh_seconds, int monitor_seconds, int type)
 {
     int elapsed_seconds = 0;
     int copies_num = 0;
-    if(type == 0)
-    {
+    if (type == 0) {
         struct stat stat_buffer;
         stat(path, &stat_buffer);
         unsigned long last_mod_time = stat_buffer.st_mtime;
         char *file_content = load_file(path);
 
-        while(elapsed_seconds < monitor_seconds)
-        {
+        while (elapsed_seconds < monitor_seconds) {
             sleep(refresh_seconds);
             elapsed_seconds += refresh_seconds;
 
             stat(path, &stat_buffer);
-            if(last_mod_time != stat_buffer.st_mtime)
-            {
-                if(save_file(basename(path), file_content, &stat_buffer) < 0)
+            if (last_mod_time != stat_buffer.st_mtime) {
+                if (save_file(basename(path), file_content, &stat_buffer) < 0)
                     return create_error("Cannot save to file");
                 copies_num++;
                 free(file_content);
@@ -98,24 +94,20 @@ int fork_job(char* path, int refresh_seconds, int monitor_seconds, int type)
 
         return copies_num;
     }
-    else if (type == 1)
-    {
+    else if (type == 1) {
         struct stat stat_buffer;
         stat(path, &stat_buffer);
         unsigned long last_mod_time = stat_buffer.st_mtime;
 
-        while(elapsed_seconds < monitor_seconds)
-        {
+        while (elapsed_seconds < monitor_seconds) {
             sleep(refresh_seconds);
             elapsed_seconds += refresh_seconds;
 
             stat(path, &stat_buffer);
-            if(last_mod_time != stat_buffer.st_mtime)
-            {
+            if (last_mod_time != stat_buffer.st_mtime) {
                 pid_t child_pid = fork();
                 copies_num++;
-                if(child_pid == 0) 
-                {
+                if (child_pid == 0) {
                     struct tm *mtime = localtime(&stat_buffer.st_mtime);
                     char mtime_buffer[50];
                     strftime (mtime_buffer,50,"%Y-%m-%d_%H-%M-%S",mtime);
@@ -125,11 +117,9 @@ int fork_job(char* path, int refresh_seconds, int monitor_seconds, int type)
 
                     execlp("cp", "cp", path, new_path, NULL);
                     exit(0);
-                } else if(child_pid > 0)
-                {
+                } else if(child_pid > 0) {
 
-                } else 
-                {
+                } else {
                     return -1;
                 } 
             }
@@ -145,14 +135,11 @@ int fork_job(char* path, int refresh_seconds, int monitor_seconds, int type)
 pid_t create_fork(char* path, int refresh_seconds, int monitor_seconds, int type)
 {
     pid_t child_pid = fork();
-    if(child_pid == 0) 
-    {
+    if (child_pid == 0) {
         exit(fork_job(path, refresh_seconds, monitor_seconds, type));
-    } else if(child_pid > 0)
-    {
+    } else if(child_pid > 0) {
         return child_pid;
-    } else 
-    {
+    } else {
         return -1;
     }
 }
@@ -165,20 +152,20 @@ int main (int argc, char *argv[])
         return create_error("Please provite 3 arguments");
 
     FILE* fd;
-    if((fd = fopen(argv[1], "r")) == NULL)
+    if ((fd = fopen(argv[1], "r")) == NULL)
         return create_error_and_close(fd, "Cannot open list file");
 
     errno = 0;
     char* end = NULL;
     int monitor_seconds = (int) strtol(argv[2], &end, 10);
-    if(errno != 0 || end == argv[2])
+    if (errno != 0 || end == argv[2])
         return create_error("Second argument is not a number"); 
 
 
     int type = 0;
-    if(strcmp(argv[3], "buffer") == 0)
+    if (strcmp(argv[3], "buffer") == 0)
         type = 0;
-    else if(strcmp(argv[3], "lazy") == 0)
+    else if (strcmp(argv[3], "lazy") == 0)
         type = 1;
     else return create_error("Third argument must be \"buffer\" or \"lazy\"");
 
@@ -191,8 +178,7 @@ int main (int argc, char *argv[])
     pid_t pids[255]; 
     #warning 255 might not be good xD
 
-    while(fscanf(fd, "%s %d\n", path_buffer, &seconds_buffer) == 2) 
-    {    
+    while (fscanf(fd, "%s %d\n", path_buffer, &seconds_buffer) == 2) {    
         pid_t child = create_fork(path_buffer, seconds_buffer, monitor_seconds, type);
         if(child < 0)
             return create_error("Cannot make fork");
