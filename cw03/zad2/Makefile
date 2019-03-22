@@ -7,7 +7,7 @@ all : main_dir main_nftw
 default : all
 
 monitor : monitor.c
-	$(CC) $(CFLAGS) monitor.c -o monitor
+	$(CC) $(CFLAGS) monitor.c file_monitor.c -o monitor
 
 tester : tester.c
 	$(CC) $(CFLAGS) tester.c -o tester

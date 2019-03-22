@@ -7,10 +7,10 @@ all : main_dir main_nftw
 default : all
 
 monitor : monitor.c
-	$(CC) $(CFLAGS) monitor.c -o monitor
+	$(CC) $(CFLAGS) monitor.c file_monitor.c -o monitor
 
-tester : tester.c
-	$(CC) $(CFLAGS) tester.c -o tester
+tester : ../zad2/tester.c
+	$(CC) $(CFLAGS) ../zad2/tester.c -o tester
 
 
 test_files : 
