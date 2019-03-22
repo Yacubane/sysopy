@@ -1,0 +1,3 @@
+test_files/lazy/file1.txt 3
+test_files/lazy/file2.txt 2
+test_files/lazy/file3.txt 1

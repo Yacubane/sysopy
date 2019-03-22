@@ -149,7 +149,7 @@ pid_t create_fork(char* path, int refresh_seconds, int monitor_seconds, int type
 int main (int argc, char *argv[]) 
 {
     if(argc < 4)
-        return create_error("Please provite 3 arguments");
+        return create_error("Please provide 3 arguments");
 
     FILE* fd;
     if ((fd = fopen(argv[1], "r")) == NULL)
@@ -175,8 +175,14 @@ int main (int argc, char *argv[])
     int seconds_buffer;
 
     int iterator = 0;
-    pid_t pids[255]; 
-    #warning 255 might not be good xD
+
+    int pidSize = 0;
+    while (fscanf(fd, "%s %d\n", path_buffer, &seconds_buffer) == 2) {    
+        pidSize++;
+    }
+    rewind(fd);
+
+    pid_t pids[pidSize]; 
 
     while (fscanf(fd, "%s %d\n", path_buffer, &seconds_buffer) == 2) {    
         pid_t child = create_fork(path_buffer, seconds_buffer, monitor_seconds, type);

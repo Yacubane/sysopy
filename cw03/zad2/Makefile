@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall
 
-.PHONY: test
+.PHONY: test_lazy test_buffer
 
 all : main_dir main_nftw
 default : all

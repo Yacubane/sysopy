@@ -18,6 +18,7 @@
         "stdio.h": "c",
         "types.h": "c",
         "wait.h": "c",
-        "stat.h": "c"
+        "stat.h": "c",
+        "resource.h": "c"
     }
 }
