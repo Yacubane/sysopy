@@ -38,18 +38,7 @@ void make_fork(const char *rel_path_buff, const char *file_name)
     }
 }
 
-static char* get_tile_type(struct stat *stat_buffer) 
-{
-    if(S_ISREG(stat_buffer->st_mode)) return "file";
-    if(S_ISDIR(stat_buffer->st_mode)) return "dir";
-    if(S_ISCHR(stat_buffer->st_mode)) return "char dev";
-    if(S_ISBLK(stat_buffer->st_mode)) return "block dev";
-    if(S_ISFIFO(stat_buffer->st_mode)) return "fifo";
-    if(S_ISLNK(stat_buffer->st_mode)) return "slink";
-    if(S_ISSOCK(stat_buffer->st_mode)) return "sock";
-    return "unknown";
-}
-int readdir_recursive(struct stat *stat_buffer, int buffer_size, int sign, time_t time, char *rel_path_buff) 
+int readdir_recursive(struct stat *stat_buffer, int buffer_size, char *rel_path_buff) 
 {
     DIR* dir;
     if((dir = opendir(".")) == NULL) return create_error("opendir error");
@@ -59,42 +48,16 @@ int readdir_recursive(struct stat *stat_buffer, int buffer_size, int sign, time_
     errno = 0;
     while((file = readdir(dir)) != NULL) {
         if(strcmp(file->d_name, ".") && strcmp(file->d_name, ".."))
-        {
+        {           
             if(lstat(file->d_name, stat_buffer) < 0) return create_error_and_close_dir(dir, "stat error");
-            int print = 1;
-            if(sign == -1)
-                if(stat_buffer->st_mtime/60 >= time/60) print=0;
-            if(sign == 0)
-                if(stat_buffer->st_mtime/60 != time/60) print=0;
-            if(sign == 1)
-                if(stat_buffer->st_mtime/60 <= time/60) print=0;
-
-
-            if(print == 1) {
-                struct tm *atime = localtime(&stat_buffer->st_atime);
-                char atime_buffer[50];
-                strftime (atime_buffer,50,"%Y-%m-%d %H:%M",atime);
-
-                struct tm *mtime = localtime(&stat_buffer->st_mtime);
-                char mtime_buffer[50];
-                strftime (mtime_buffer,50,"%Y-%m-%d %H:%M",mtime);
-
-                char cwd_buffer[255];
-                if(getcwd(cwd_buffer, 255) == NULL) return create_error_and_close_dir(dir, "getcwd error");
-
-                printf("%10s %11ldB %16s %16s %s/%s\n", get_tile_type(stat_buffer),
-                stat_buffer->st_size, atime_buffer, mtime_buffer, cwd_buffer, file->d_name);
-            }
-            
             if(S_ISDIR(stat_buffer->st_mode)){
 
                 make_fork(rel_path_buff, file->d_name);
-
                 char rel_path_buff[512];
                 snprintf(rel_path_buff, 512, "%s/%s", rel_path_buff, file->d_name);
                 if(chdir(file->d_name) != 0) 
                     return create_error_and_close_dir(dir, "Cannot get forward in files tree");
-                readdir_recursive(stat_buffer, buffer_size, sign, time, rel_path_buff);
+                readdir_recursive(stat_buffer, buffer_size, rel_path_buff);
                 if(chdir("..") != 0) 
                     return create_error_and_close_dir(dir, "Cannot get back in files tree");
             }
@@ -110,15 +73,11 @@ int readdir_recursive(struct stat *stat_buffer, int buffer_size, int sign, time_
 }
 
 
-int view_dir(char *path, int sign, time_t time) 
+int view_dir(char *path) 
 {
-    if(sign < -1 || sign > 1)
-        return create_error("Wrong sign");
-
     struct stat *stat_buffer = malloc(sizeof(struct stat));
-
     if(chdir(path) != 0) return create_error("Cannot change directory to choosen path");
-    readdir_recursive(stat_buffer, 255, sign, time, "");
+    readdir_recursive(stat_buffer, 255, "");
     free(stat_buffer);
     return 0;
 }
