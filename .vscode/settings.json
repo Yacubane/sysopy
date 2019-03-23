@@ -19,6 +19,7 @@
         "types.h": "c",
         "wait.h": "c",
         "stat.h": "c",
-        "resource.h": "c"
+        "resource.h": "c",
+        "libgen.h": "c"
     }
 }

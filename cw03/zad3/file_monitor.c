@@ -61,7 +61,7 @@ int save_file(const char *name, const char *file_content, struct stat *stat_buff
 }
 
 int fork_job(char* path, int refresh_seconds, int monitor_seconds, int type,
-    int memory_restriction, int cpu_restriction)
+    int cpu_restriction, int memory_restriction)
 {
     struct rlimit cpu_rlimit, memory_rlimit;
 
