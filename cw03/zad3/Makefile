@@ -32,7 +32,8 @@ test_buffer : test_files tester monitor
 	./tester test_files/buffer/file2.txt 5 10 20 &
 	./tester test_files/buffer/file3.txt 10 15 25 &
 
-	./monitor list_buffer.txt 30 buffer 1 100
+	#./monitor list_buffer.txt 30 buffer 1 100
+	./monitor list_buffer.txt 30 buffer 1 200
 
 	pkill tester
 
@@ -41,7 +42,8 @@ test_lazy : test_files tester monitor
 	./tester test_files/lazy/file2.txt 5 10 20 &
 	./tester test_files/lazy/file3.txt 10 15 25 &
 
-	./monitor list_lazy.txt 30 lazy 1 100
+	#./monitor list_lazy.txt 30 lazy 1 1
+	./monitor list_lazy.txt 30 lazy 1 200
 
 	pkill tester
 

@@ -119,7 +119,6 @@ int fork_job(char* path, int refresh_seconds, int monitor_seconds, int type,
             stat(path, &stat_buffer);
             if (last_mod_time != stat_buffer.st_mtime) {
                 pid_t child_pid = fork();
-                copies_num++;
                 if (child_pid == 0) {
                     struct tm *mtime = localtime(&stat_buffer.st_mtime);
                     char mtime_buffer[50];
@@ -127,7 +126,6 @@ int fork_job(char* path, int refresh_seconds, int monitor_seconds, int type,
 
                     char new_path[255];
                     snprintf(new_path, 255, "%s/%s_%s", "archiwum", basename(path), mtime_buffer);
-
                     execlp("cp", "cp", path, new_path, NULL);
                     exit(0);
                 } else if(child_pid > 0) {
@@ -146,18 +144,28 @@ int fork_job(char* path, int refresh_seconds, int monitor_seconds, int type,
             rusage.ru_stime.tv_sec, rusage.ru_stime.tv_usec,
             rusage.ru_maxrss);
 
+        int not_copied_num = 0;
         while (1) {
             int status;
             int pid = wait(&status);
+
+
+            if (pid != -1) {
+                if (WIFEXITED(status))
+                    copies_num++;
+                else if (WIFSIGNALED(status))
+                    not_copied_num++;
+            }
+
             if (pid == -1 && errno == ECHILD)
                 break;
         }
         
         getrusage(RUSAGE_CHILDREN, &rusage);
-        printf("Raport podprocesu dzieci o PID: %d. u_time: %lu [s] %lu [us] s_time: %lu [s] %ld [us] maxrss %ld\n",
+        printf("Raport podprocesu dzieci o PID: %d. u_time: %lu [s] %lu [us] s_time: %lu [s] %ld [us] maxrss %ld. Nie udało się skopiować %d razy.\n",
             getpid(), rusage.ru_utime.tv_sec, rusage.ru_utime.tv_usec,
             rusage.ru_stime.tv_sec, rusage.ru_stime.tv_usec,
-            rusage.ru_maxrss);
+            rusage.ru_maxrss, not_copied_num);
     }
    
     return copies_num;
