@@ -72,9 +72,9 @@ int fork_job(char* path, int refresh_seconds, int monitor_seconds, int type,
     memory_rlimit.rlim_max=memory_restriction*1024*1024;
 
     if(setrlimit(RLIMIT_CPU, &cpu_rlimit) < 0)
-        return create_error("Cannot assaign CPU limit"); 
+        return create_error("Cannot assign CPU limit"); 
     if(setrlimit(RLIMIT_AS, &memory_rlimit) < 0)
-        return create_error("Cannot assaign memory limit"); 
+        return create_error("Cannot assign memory limit"); 
 
     int elapsed_seconds = 0;
     int copies_num = 0;
