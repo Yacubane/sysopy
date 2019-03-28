@@ -1,0 +1,3 @@
+test_files/buffer/file1.txt 3
+test_files/buffer/file2.txt 2
+test_files/buffer/file3.txt 1
