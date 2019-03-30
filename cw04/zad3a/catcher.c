@@ -4,6 +4,10 @@
 #include <unistd.h>
 #include <string.h>
 
+#define TYPE_KILL 0
+#define TYPE_SIGQUEUE 1
+#define TYPE_SIGRT 2
+
 int signal_counter = 0;
 int type = 0;
 
@@ -17,16 +21,19 @@ void handleSIGUSR (int signo, siginfo_t* info, void* ptr) {
       signal_counter++;
    } else if (signo == SIGUSR2 || signo == SIGRTMIN+1) {
         pid_t pid = info->si_pid;
-        if(type == 0) {
+        if(type == TYPE_KILL) {
             for(int i = 0; i < signal_counter; i++) 
                 kill(pid, SIGUSR1);
             kill(pid, SIGUSR2);
-        } else if(type == 1) {
-            union sigval val;
-            for(int i = 0; i < signal_counter; i++)
+        } else if(type == TYPE_SIGQUEUE) {
+            for(int i = 0; i < signal_counter; i++) {
+                union sigval val;
+                val.sival_int = i+1;
                 sigqueue(pid, SIGUSR1, val);
+            }
+            union sigval val;
             sigqueue(pid, SIGUSR2, val);
-        } else if(type == 2) {
+        } else if(type == TYPE_SIGRT) {
             for(int i = 0; i < signal_counter; i++) 
                 kill(pid, SIGRTMIN);
             kill(pid, SIGRTMIN+1);
@@ -46,11 +53,11 @@ int main(int argc, char* argv[])
 
     type = 0;
     if (strcmp(argv[1], "KILL") == 0)
-        type = 0;
+        type = TYPE_KILL;
     else if (strcmp(argv[1], "SIGQUEUE") == 0)
-        type = 1;
+        type = TYPE_SIGQUEUE;
     else if (strcmp(argv[1], "SIGRT") == 0)
-        type = 2;
+        type = TYPE_SIGRT;
     else return create_error("Third argument must be \"KILL\", \"SIGQUEUE\" or \"SIGRT\"");   
 
     sigset_t newmask;
@@ -67,20 +74,20 @@ int main(int argc, char* argv[])
     }
 
     if (sigprocmask(SIG_BLOCK, &newmask, &oldmask) < 0)
-        perror("Nie udało się zablokować sygnału");
+        perror("Cannot block signal");
 
     struct sigaction action;
     action.sa_flags=SA_SIGINFO; //dla sa_sigaction a nie sa_handler
     action.sa_sigaction = handleSIGUSR;
     sigemptyset(&action.sa_mask); 
 
-    if(type == 0 || type == 1) {
+    if(type == TYPE_KILL || type == TYPE_SIGQUEUE) {
         sigaddset(&action.sa_mask, SIGUSR1); 
         sigaddset(&action.sa_mask, SIGUSR2); 
         sigaction(SIGUSR1, &action, NULL);
         sigaction(SIGUSR2, &action, NULL);
 
-    }else if(type == 2) {
+    }else if(type == TYPE_SIGRT) {
         sigaddset(&action.sa_mask, SIGRTMIN); 
         sigaddset(&action.sa_mask, SIGRTMIN+1); 
         sigaction(SIGRTMIN, &action, NULL);
@@ -88,7 +95,7 @@ int main(int argc, char* argv[])
     }
 
 
-    printf("PID catchera: %d\n", getpid());
+    printf("Catcher PID: %d\n", getpid());
     while(1);
 
 }

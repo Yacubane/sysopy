@@ -5,8 +5,13 @@
 #include <errno.h>
 #include <string.h>
 
+#define TYPE_KILL 0
+#define TYPE_SIGQUEUE 1
+#define TYPE_SIGRT 2
+
 int signal_counter;
 int signals_num;
+int type;
 
 static int create_error(char *message) 
 {
@@ -14,12 +19,15 @@ static int create_error(char *message)
     return -1;
 }
 
-void handleSignals (int signo, siginfo_t* info, void* ptr) {
+void handleSignals (int signo, siginfo_t* info, void* context) {
   if (signo == SIGUSR1 || signo == SIGRTMIN) {
       signal_counter++;
+        if(type == TYPE_SIGQUEUE) {
+            printf("Sender is reading signal %d and this is %d signal from catcher\n", signal_counter, info->si_value.sival_int);
+        }
    } else if (signo == SIGUSR2 || signo == SIGRTMIN+1) {
-       printf("Sender send %d and read %d signals\n", signals_num, signal_counter);
-       exit(0);
+        printf("Sender send %d and read %d signals\n", signals_num, signal_counter);
+        exit(0);
    }
 }
 
@@ -45,13 +53,13 @@ int main(int argc, char* argv[])
     if (errno != 0 || end == argv[2])
         return create_error("Second argument is not a number"); 
 
-    int type = 0;
+    type = 0;
     if (strcmp(argv[3], "KILL") == 0)
-        type = 0;
+        type = TYPE_KILL;
     else if (strcmp(argv[3], "SIGQUEUE") == 0)
-        type = 1;
+        type = TYPE_SIGQUEUE;
     else if (strcmp(argv[3], "SIGRT") == 0)
-        type = 2;
+        type = TYPE_SIGRT;
     else return create_error("Third argument must be \"KILL\", \"SIGQUEUE\" or \"SIGRT\"");    
 
 
@@ -69,19 +77,19 @@ int main(int argc, char* argv[])
     }
 
     if (sigprocmask(SIG_BLOCK, &newmask, &oldmask) < 0)
-        perror("Nie udało się zablokować sygnału");
+        perror("Cannot block signal");
 
     struct sigaction action;
     action.sa_flags=SA_SIGINFO; //dla sa_sigaction a nie sa_handler
     action.sa_sigaction = handleSignals;
     sigemptyset(&action.sa_mask); 
-    if(type == 0 || type == 1) {
+    if(type == TYPE_KILL || type == TYPE_SIGQUEUE) {
         sigaddset(&action.sa_mask, SIGUSR1); 
         sigaddset(&action.sa_mask, SIGUSR2); 
         sigaction(SIGUSR1, &action, NULL);
         sigaction(SIGUSR2, &action, NULL);
 
-    }else if(type == 2) {
+    }else if(type == TYPE_SIGRT) {
         sigaddset(&action.sa_mask, SIGRTMIN); 
         sigaddset(&action.sa_mask, SIGRTMIN+1); 
         sigaction(SIGRTMIN, &action, NULL);
@@ -89,16 +97,16 @@ int main(int argc, char* argv[])
     }
 
 
-    if(type == 0) {
+    if(type == TYPE_KILL) {
         for(int i = 0; i < signals_num; i++) 
             kill(catcher_pid, SIGUSR1);
         kill(catcher_pid, SIGUSR2);
-    } else if(type == 1) {
+    } else if(type == TYPE_SIGQUEUE) {
         union sigval val;
         for(int i = 0; i < signals_num; i++) 
             sigqueue(catcher_pid, SIGUSR1, val);
         sigqueue(catcher_pid, SIGUSR2, val);
-    } else if(type == 2) {
+    } else if(type == TYPE_SIGRT) {
         for(int i = 0; i < signals_num; i++) 
             kill(catcher_pid, SIGRTMIN);
         kill(catcher_pid, SIGRTMIN+1);
