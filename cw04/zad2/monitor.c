@@ -1,4 +1,3 @@
-#define _GNU_SOURCE
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,6 +7,7 @@
 #include <libgen.h>
 #include <time.h>
 #include <string.h>
+#include <signal.h>
 #include "file_monitor.h"
 
 typedef struct {
@@ -69,14 +69,34 @@ int stop_monitor(int pid)
     printf("Cannot stop monitor with PID %d. Didn't found process with that PID\n", pid);
     return -1;
 }
+
+void end() {
+    for (int i = 0; i < monitors_size; i++) {
+        kill(monitors[i]->pid, SIGTERM);
+    }
+    for (int i  = 0; i < monitors_size; i++) {
+        int status;
+        waitpid(monitors[i]->pid, &status, 0);
+        printf("Process %d created %d copies\n",monitors[i]->pid, WEXITSTATUS(status));
+    }
+    exit(0);
+}
+
+void handleSIGINT(int signum){
+    end();
+}
+
 int main (int argc, char *argv[]) 
 {
+    signal(SIGINT, handleSIGINT);
+
     if(argc != 2)
         return create_error("Please provide 1 argument");
 
     FILE* fd;
     if ((fd = fopen(argv[1], "r")) == NULL)
         return create_error_and_close(fd, "Cannot open list file");
+
 
     system("mkdir -p archiwum");
 
@@ -136,19 +156,11 @@ int main (int argc, char *argv[])
             int number = atoi(numberBuffer);
             start_monitor(number);
         } else if(!strncmp(buffer, "END", 3)) {
-            for (int i = 0; i < monitors_size; i++) {
-                kill(monitors[i]->pid, SIGTERM);
-            }
-            break;
+            end();
         } else {
             printf("Unknown command\n");
         }
 
     }
-    
-    for (int i  = 0; i < monitors_size; i++) {
-        int status;
-        waitpid(monitors[i]->pid, &status, 0);
-        printf("Process %d created %d copies\n",monitors[i]->pid, WEXITSTATUS(status));
-    }
+
 }
