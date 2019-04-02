@@ -22,6 +22,8 @@ pid_t create_fork()
 
 void SIGINThandler(int signum){
     printf("Odebrano sygnał SIGINT\n");
+    if(fork_pid > 0)
+        kill(fork_pid, SIGKILL);
     exit(0);
 }
 
