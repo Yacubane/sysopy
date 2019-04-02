@@ -145,7 +145,7 @@ int main (int argc, char *argv[])
             }
         } else if(!strncmp(buffer, "START ALL", 9)) {
             for (int i = 0; i < monitors_size; i++) {
-                stop_monitor(monitors[i]->pid);
+                start_monitor(monitors[i]->pid);
             }
         } else if(!strncmp(buffer, "STOP", 4)) {
             char* numberBuffer = buffer + 5;
