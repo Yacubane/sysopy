@@ -21,5 +21,11 @@
         "stat.h": "c",
         "resource.h": "c",
         "libgen.h": "c"
+    },
+    "files.exclude": {
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
     }
 }

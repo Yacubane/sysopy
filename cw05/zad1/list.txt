@@ -1,0 +1,2 @@
+echo tata | tr a x | tr t q | tr q w | tr w e
+echo tata | tr a x | tr t q | tr q w | tr w a
