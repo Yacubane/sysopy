@@ -143,4 +143,5 @@ int main(int argc, char *argv[])
         }
     }
     free(commands);
+    return 0;
 }
