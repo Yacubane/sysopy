@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
         fread(date_buff, sizeof(char), date_buff_size, file);
         pclose(file);
 
-        date_buff[strlen(date_buff)-1] = '\0';
+        date_buff[strlen(date_buff) - 1] = '\0';
         snprintf(buff, buff_size, "PID: %d DATE: %s", getpid(), date_buff);
         write(fd, buff, buff_size);
         sleep(2 + rand() % 3);
