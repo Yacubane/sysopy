@@ -4,6 +4,7 @@ if [ ! -d $1 ]; then
 else
     mkdir DybczakJakub
     cp -R $1 DybczakJakub
+    rm -f DybczakJakub/$1/README.MD
     tar cvzf DybczakJakub-$1.tar.gz DybczakJakub
     rm -rf DybczakJakub
 fi
