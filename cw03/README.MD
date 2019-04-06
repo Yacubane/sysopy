@@ -1,4 +1,4 @@
-# Zestaw III - Tworzenie procesów. Środowisko procesu, sterowanie procesami.
+# Zestaw 3 - Tworzenie procesów. Środowisko procesu, sterowanie procesami.
 
 
 ## Zadanie 1. Drzewo procesów (15%)

@@ -1,4 +1,4 @@
-# Zestaw IV - Sygnały.
+# Zestaw 4 - Sygnały.
 
 Rodzaje sygnałów: SIGINT, SIGQUIT, SIGKILL, SIGTSTP, SIGSTOP, SIGTERM, SIGSEGV, SIGHUP, SIGALARM, SIGCHLD, SIGUSR1, SIGUSR2
 

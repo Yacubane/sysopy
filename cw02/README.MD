@@ -1,4 +1,4 @@
-# Zestaw II - Operacje na plikach
+# Zestaw 2 - Operacje na plikach
 
 Zapoznaj się ze składnią i operacjami wykonywanymi przez poniższe funkcje:
 ### Funkcje operujące na plikach i katalogach
