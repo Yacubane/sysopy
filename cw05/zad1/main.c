@@ -10,7 +10,6 @@
 #define MAX_COMMAND_COUNT 64
 #define MAX_PROGRAM_COUNT 64
 #define MAX_LINE_SIZE 512
-
 typedef struct command_t
 {
     pid_t pid;
@@ -77,13 +76,11 @@ int main(int argc, char *argv[])
 
         int old_pipe[2];
         int new_pipe[2];
-        int is_old_pipe = 0;
-
         for (int i = 0; i < program_index; i++)
         {
-
-            if (i < (program_index - 1) && pipe(new_pipe) < 0)
-                return create_error("Cannot make pipe");
+            if (i < (program_index - 1))
+                if (pipe(new_pipe) < 0)
+                    return create_error("Cannot make pipe");
 
             pid_t pid = fork();
             if (pid == 0)
@@ -117,18 +114,12 @@ int main(int argc, char *argv[])
                 {
                     old_pipe[0] = new_pipe[0];
                     old_pipe[1] = new_pipe[1];
-                    is_old_pipe = 1;
                 }
             }
             else
             {
                 return create_error("Cannot make fork");
             }
-        }
-        if (is_old_pipe)
-        {
-            close(old_pipe[0]);
-            close(old_pipe[1]);
         }
 
         for (int i = 0; i < program_index; i++)
