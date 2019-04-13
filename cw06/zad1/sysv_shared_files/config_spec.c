@@ -1,4 +1,4 @@
-#include "shared.h"
+#include "config_spec.h"
 char *get_home_dir()
 {
     return getenv("HOME");

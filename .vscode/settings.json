@@ -30,7 +30,19 @@
         "msghdl_sysv.h": "c",
         "colors.h": "c",
         "signal.h": "c",
-        "types_sysv.h": "c"
+        "types_sysv.h": "c",
+        "clients_handler.h": "c",
+        "type_converter.h": "c",
+        "global_types.h": "c",
+        "cparser.h": "c",
+        "client_helper.h": "c",
+        "global_msgtypes.h": "c",
+        "structures.h": "c",
+        "local_msgtypes.h": "c",
+        "msgtype_converter.h": "c",
+        "config.h": "c",
+        "config_spec.h": "c",
+        "msg.h": "c"
     },
     "files.exclude": {
         "**/.classpath": true,

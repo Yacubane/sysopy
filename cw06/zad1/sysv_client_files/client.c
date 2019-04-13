@@ -1,4 +1,6 @@
-#include "../shared/shared.h"
+#include "../shared_files/config.h"
+#include "../sysv_shared_files/config_spec.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,8 +8,12 @@
 #include <sys/types.h>
 #include <signal.h>
 #include "../client_files/cparser.h"
-#include "../sysv_shared_files/types.h"
-#include "../shared/colors.h"
+#include "../client_files/client_helper.h"
+#include "../shared_files/msgtype_converter.h"
+#include "../sysv_shared_files/local_msgtypes.h"
+#include "../shared_files/colors.h"
+#include "../shared_files/global_msgtypes.h"
+#include "../sysv_shared_files/structures.h"
 
 msgbuf_t *msg_buffer;
 msgbuf_t *cmsg_buffer;
@@ -16,9 +22,9 @@ int client_id;
 int client_msgid;
 int fork_pid;
 
-int send_message(int type, char *message)
+int send_message(int global_type, char *message)
 {
-    msg_buffer->mtype = type;
+    msg_buffer->mtype = convert_to_local(global_type);
     msg_buffer->mid = client_id;
     strcpy(msg_buffer->mtext, message);
     if (msgsnd(server_msgid, msg_buffer, sizeof(msgbuf_t) - sizeof(long), 0) < 0)
@@ -27,12 +33,17 @@ int send_message(int type, char *message)
 }
 void stop()
 {
-    send_message(MTYPE_STOP, "");
+    send_message(TYPE_STOP, "");
     kill(fork_pid, SIGKILL);
     exit(0);
 }
+void stop_client()
+{
+    stop();
+}
 
-void exit_fun() {
+void exit_fun()
+{
     struct msqid_ds ms;
     msgctl(client_msgid, IPC_RMID, &ms);
 }
@@ -70,7 +81,6 @@ int main(int argc, char *argv[])
 
     atexit(exit_fun);
 
-
     msg_buffer = malloc(sizeof(msgbuf_t));
     cmsg_buffer = malloc(sizeof(cmsgbuf_t));
 
@@ -106,73 +116,9 @@ int main(int argc, char *argv[])
                 kill(getppid(), 9);
                 pdie("Receive message error", 2);
             }
-
             if (strlen(cmsg_buffer->mtext) >= 5 && strncmp(cmsg_buffer->mtext, "@STOP", 5) == 0)
                 stop();
-
-            if (strlen(cmsg_buffer->mtext) >= 5 && strncmp(cmsg_buffer->mtext, "ERROR", 5) == 0)
-                set_color(ANSI_COLOR_RED);
-            else if (strlen(cmsg_buffer->mtext) >= 7 && strncmp(cmsg_buffer->mtext, "SUCCESS", 7) == 0)
-                set_color(ANSI_COLOR_GREEN);
-            else if (strlen(cmsg_buffer->mtext) >= 7 && strncmp(cmsg_buffer->mtext, "WARNING", 7) == 0)
-                set_color(ANSI_COLOR_YELLOW);
-            else
-                set_color(ANSI_COLOR_CYAN);
-            printf("SERVER: %s", cmsg_buffer->mtext);
-            reset_color();
+            print_server_response(cmsg_buffer->mtext);
         }
     }
-}
-void send_echo(char *message)
-{
-    send_message(MTYPE_ECHO, message);
-}
-void send_list()
-{
-    send_message(MTYPE_LIST, "");
-}
-void send_friends(int *friends, int friends_size, int array_size)
-{
-    char buffer[255];
-    char num_buffer[10];
-    strcpy(buffer, "");
-    for (int i = 0; i < friends_size; i++)
-    {
-        snprintf(num_buffer, 10, "%d", friends[i]);
-        if (i < (friends_size - 1))
-            strcat(num_buffer, " ");
-        strcat(buffer, num_buffer);
-    }
-
-    send_message(MTYPE_FRIENDS, buffer);
-}
-void send_add(int id)
-{
-    char buffer[255];
-    snprintf(buffer, 255, "%d", id);
-    send_message(MTYPE_ADD, buffer);
-}
-void send_del(int id)
-{
-    char buffer[255];
-    snprintf(buffer, 255, "%d", id);
-    send_message(MTYPE_DEL, buffer);
-}
-void send_to_all(char *message)
-{
-    send_message(MTYPE_2ALL, message);
-}
-void send_to_friends(char *message)
-{
-    send_message(MTYPE_2FRIENDS, message);
-}
-void send_to_one(int id, char *message)
-{
-    char buffer[255];
-    snprintf(buffer, 255, "%d %s", id, message);
-    send_message(MTYPE_2ONE, buffer);
-}
-void send_stop()
-{
-    stop();
 }

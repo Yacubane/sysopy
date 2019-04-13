@@ -1,9 +1,12 @@
 #include <stdio.h>
-#include "../shared/utils.h"
-#include "../shared/shared.h"
-#include "../shared/errors.h"
+#include "../shared_files/utils.h"
+#include "../shared_files/config.h"
+#include "../sysv_shared_files/config_spec.h"
+#include "../shared_files/errors.h"
 #include "../server_files/msghdl.h"
-#include "../sysv_shared_files/types.h"
+#include "../shared_files/msgtype_converter.h"
+#include "../sysv_shared_files/local_msgtypes.h"
+#include "../sysv_shared_files/structures.h"
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
@@ -20,7 +23,7 @@ void handleSIGINT(int signal)
     {
         if (msgrcv(msgid, buffer, sizeof(msgbuf_t) - sizeof(long), -MTYPE_MAX, 0) == -1)
             pdie("Receive message error", 2);
-        handle_message(buffer->mid, convert_type(buffer->mtype), buffer->mtext);
+        handle_message(buffer->mid, convert_to_global(buffer->mtype), buffer->mtext);
         int new_clients_num = get_clients_num();
         if (new_clients_num != clients_num)
         {
@@ -65,7 +68,7 @@ int main(int argc, char *argv[])
     {
         if (msgrcv(msgid, buffer, sizeof(msgbuf_t) - sizeof(long), -MTYPE_MAX, 0) == -1)
             pdie("Receive message error", 2);
-        handle_message(buffer->mid, convert_type(buffer->mtype), buffer->mtext);
+        handle_message(buffer->mid, convert_to_global(buffer->mtype), buffer->mtext);
     }
     free(buffer);
 }

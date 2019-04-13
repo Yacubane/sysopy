@@ -1,4 +1,4 @@
-#include "../shared/shared.h"
+#include "../shared_files/config.h"
 
 #define MTYPE_STOP 1
 #define MTYPE_LIST 2
@@ -11,15 +11,4 @@
 #define MTYPE_2ONE 9
 #define MTYPE_INIT 10
 #define MTYPE_MAX 10
-
-typedef struct msgbuf_t {
-  long mtype;
-  char mtext[MAX_STATEMENT_SIZE];
-  int mid;
-} msgbuf_t;
-
-typedef struct cmsgbuf_t {
-  long mtype;
-  char mtext[MAX_STATEMENT_SIZE];
-} cmsgbuf_t;
 
