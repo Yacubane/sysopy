@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     {
         int r = read(fd, buff, buff_size);
         if (r < 0)
-            return create_error("EOF found");
+            return create_error("Error when reading");
         else if (r > 0)
             printf("%s\n", buff);
     }

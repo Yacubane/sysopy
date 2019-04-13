@@ -1,0 +1,6 @@
+ADD 1
+DEL 1
+2ALL test
+ECHO end
+LIST
+FRIENDS 1 2

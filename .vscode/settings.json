@@ -20,7 +20,17 @@
         "wait.h": "c",
         "stat.h": "c",
         "resource.h": "c",
-        "libgen.h": "c"
+        "libgen.h": "c",
+        "msghdl.h": "c",
+        "errors.h": "c",
+        "shared.h": "c",
+        "server.h": "c",
+        "msghdl_spec.h": "c",
+        "utils.h": "c",
+        "msghdl_sysv.h": "c",
+        "colors.h": "c",
+        "signal.h": "c",
+        "types_sysv.h": "c"
     },
     "files.exclude": {
         "**/.classpath": true,
