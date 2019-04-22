@@ -1,8 +1,8 @@
-#include "../shared_files/global_msgtypes.h"
+#include "shared_files/global_msgtypes.h"
 #include "local_msgtypes.h"
-#include "../server_files/msghdl.h"
-#include "../shared_files/msgtype_converter.h"
-#include "../shared_files/config.h"
+#include "server_files/msghdl.h"
+#include "shared_files/msgtype_converter.h"
+#include "shared_files/config.h"
 
 int convert_to_global(int type)
 {

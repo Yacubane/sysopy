@@ -1,4 +1,4 @@
-#include "../shared_files/config.h"
+#include "shared_files/config.h"
 
 #define MTYPE_STOP 'S'
 #define MTYPE_LIST 'L'

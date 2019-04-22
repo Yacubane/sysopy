@@ -1,10 +1,8 @@
-#include "../server_files/clients_handler.h"
+#include "server_files/clients_handler.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <mqueue.h>
-
-#include "../sysv_shared_files/structures.h"
 
 typedef struct client_t
 {

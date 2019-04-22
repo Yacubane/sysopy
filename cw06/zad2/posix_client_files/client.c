@@ -1,5 +1,5 @@
-#include "../shared_files/config.h"
-#include "../sysv_shared_files/config_spec.h"
+#include "shared_files/config.h"
+#include "posix_shared_files/config_spec.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,13 +7,12 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <signal.h>
-#include "../client_files/cparser.h"
-#include "../client_files/client_helper.h"
-#include "../shared_files/msgtype_converter.h"
-#include "../sysv_shared_files/local_msgtypes.h"
-#include "../shared_files/colors.h"
-#include "../shared_files/global_msgtypes.h"
-#include "../sysv_shared_files/structures.h"
+#include "client_files/cparser.h"
+#include "client_files/client_helper.h"
+#include "shared_files/msgtype_converter.h"
+#include "posix_shared_files/local_msgtypes.h"
+#include "shared_files/colors.h"
+#include "shared_files/global_msgtypes.h"
 #include <mqueue.h>
 #include <fcntl.h>
 #include <signal.h>

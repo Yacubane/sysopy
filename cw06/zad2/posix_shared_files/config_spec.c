@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "local_msgtypes.h"
-#include "../shared_files/global_msgtypes.h"
+#include "shared_files/global_msgtypes.h"
 char* get_server_path()
 {
     return "/srv";
