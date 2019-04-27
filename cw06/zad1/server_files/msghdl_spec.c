@@ -93,7 +93,7 @@ int handle_friends(int client_id, int *clients_id, int friends_size, int array_s
 
     for (int i = 0; i < get_client_array_size(); i++)
         if (is_client(i))
-            set_client_friend(i, 0);
+            set_client_friend(client_arr_id, i, 0);
 
     for (int i = 0; i < friends_size; i++)
         handle_add(client_id, clients_id[i]);
@@ -115,13 +115,13 @@ int handle_add(int client_id, int to_add_client_id)
         send_error_message(client_arr_id, "Adding client - client doesn't exist");
         return err("Cannot find client by id", -1);
     }
-    if (is_client_friend(to_add_client_arr_id))
+    if (is_client_friend(client_arr_id, to_add_client_arr_id))
     {
         send_warning_message(client_arr_id, "This client is friend already");
         return 1;
     }
 
-    set_client_friend(to_add_client_arr_id, 1);
+    set_client_friend(client_arr_id, to_add_client_arr_id, 1);
     send_success_message(client_arr_id, "Added new friend");
 
     return 0;
@@ -138,12 +138,12 @@ int handle_del(int client_id, int to_del_client_id)
         send_error_message(client_arr_id, "Deleting client - client doesn't exist");
         return err("Cannot find client by id", -1);
     }
-    if (!is_client_friend(to_del_client_arr_id))
+    if (!is_client_friend(client_arr_id, to_del_client_arr_id))
     {
         send_warning_message(client_arr_id, "This client isn't friend already");
         return 1;
     }
-    set_client_friend(to_del_client_arr_id, 0);
+    set_client_friend(client_arr_id, to_del_client_arr_id, 0);
     send_success_message(client_arr_id, "Deleted friend");
     return 0;
 }
@@ -169,7 +169,7 @@ int handle_to_friends(int client_id, char *message)
         return err("Cannot find client by id", -1);
     char *final_message = create_message(client_id, message);
     for (int i = 0; i < get_client_array_size(); i++)
-        if (is_client(i) && is_client_friend(i))
+        if (is_client(i) && is_client_friend(client_arr_id, i))
             if (send_message(i, final_message) < 0)
                 outerr("Cannot send message");
     free(final_message);

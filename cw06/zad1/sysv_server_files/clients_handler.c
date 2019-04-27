@@ -11,7 +11,7 @@ typedef struct client_t
 {
     int id;
     key_t queue_id;
-    int is_friend;
+    int * friends;
 } client_t;
 
 static cmsgbuf_t *cmsg_buffer;
@@ -52,7 +52,7 @@ int init_client(char *message)
             clients[i] = malloc(sizeof(client_t));
             clients[i]->id = cilent_no++;
             clients[i]->queue_id = msgid;
-            clients[i]->is_friend = 0;
+            clients[i]->friends = calloc(MAX_CLIENTS_SIZE, sizeof(int));
 
             cmsg_buffer->mtype = clients[i]->id;
             if ((msgsnd(msgid, cmsg_buffer, sizeof(cmsgbuf_t) - sizeof(long), 0)) < 0)
@@ -84,16 +84,16 @@ int is_client(int array_id)
     return 1;
 }
 
-int is_client_friend(int array_id)
+int is_client_friend(int array_id, int friend_array_id)
 {
-    if (clients[array_id]->is_friend == 1)
+    if (clients[array_id]->friends[friend_array_id] == 1)
         return 1;
     return 0;
 }
 
-int set_client_friend(int array_id, int is_friend)
+int set_client_friend(int array_id, int friend_array_id, int is_friend)
 {
-    clients[array_id]->is_friend = is_friend;
+    clients[array_id]->friends[friend_array_id] = is_friend;
     return 0;
 }
 
