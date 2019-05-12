@@ -21,5 +21,5 @@ void current_time(char *buffer, int size)
 
     time(&rawtime);
     timeinfo = localtime(&rawtime);
-    strftime(buffer, size, "%Y-%m-%d %H-%M-%S", timeinfo);
+    strftime(buffer, size, "%Y-%m-%d %H:%M:%S", timeinfo);
 }

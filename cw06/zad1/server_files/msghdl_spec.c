@@ -60,9 +60,10 @@ int handle_echo(int client_id, char *message)
     if ((client_arr_id = get_client_arr_id(client_id)) == -1)
         return err("Cannot find client by id", -1);
 
-    if (send_message(client_arr_id, message) < 0)
-        outerr("Cannot send message");
-
+    char *final_message = create_message(client_id, message);
+    if (send_message(client_arr_id, final_message) < 0)
+                outerr("Cannot send message");
+    free(final_message);
     return 0;
 }
 int handle_list(int client_id)
