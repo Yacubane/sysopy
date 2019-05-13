@@ -42,7 +42,10 @@
         "msgtype_converter.h": "c",
         "config.h": "c",
         "config_spec.h": "c",
-        "msg.h": "c"
+        "msg.h": "c",
+        "box.h": "c",
+        "queue.h": "c",
+        "type_traits": "c"
     },
     "files.exclude": {
         "**/.classpath": true,
