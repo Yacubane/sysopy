@@ -17,6 +17,7 @@ int memid;
 void onexit()
 {
     sha_lcksem(semid);
+    cb->is_trucker = 0;
     printf("Trucker locked semaphore last time\n");
     sha_rmsem(get_semaphore_key(), semid);
     sha_unmapsha(cb, sizeof(conveyor_belt_t));
@@ -60,6 +61,7 @@ int main(int argc, char *argv[])
     cb = sha_mapsha(memid, sizeof(conveyor_belt_t));
     cb->max_weight = cb_capacity;
     cb->semaphore_key = get_semaphore_key();
+    cb->is_trucker = 1;
 
     semid = sha_opnsem(get_semaphore_key());
     sha_rmsem(get_semaphore_key(), semid);
@@ -92,8 +94,10 @@ int main(int argc, char *argv[])
         if (trucker_capacity < actual_weight + box.weight)
         {
             printf("Full truck - offloading\n");
+            sha_lcksem(semid);
             actual_weight = 0;
             usleep(TRUCKER_OFFLOADING_TIME_MICROS);
+            sha_unlcksem(semid);
             printf("Empty truck come\n");
         }
 

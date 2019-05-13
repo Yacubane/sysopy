@@ -59,9 +59,11 @@ void put_box()
         printf("Loader PID: %7d - conveyor belt cannot take more weight", pid);
         reset_color();
     }
-    else if (res == -3)
+    else if (res == -3) //semaphore error
         exit(-1);
-
+    else if (res == -4) //trucker closed
+        exit(-1);
+        
     last_res = res;
 }
 
