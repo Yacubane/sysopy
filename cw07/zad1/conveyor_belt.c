@@ -9,7 +9,7 @@ int cb_put(conveyor_belt_t *cb, int semid, box_t *box)
     int to_return = 0;
     if (sha_lcksem(semid) < 0)
         return -3;
-    if(cb->is_trucker == 0)
+    if (cb->is_trucker == 0)
         return -4;
 
     box_t tmp_box;

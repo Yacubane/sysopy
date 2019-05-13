@@ -1,10 +1,7 @@
 CC = gcc
 CFLAGS = -Wall
 
-.PHONY: test clean
-
-all : test
-default : all
+.PHONY: clean
 
 trucker : ../zad1/box.c ../zad1/cirque_memblock.c ../zad1/conveyor_belt.c ../zad1/errors.c ../zad1/trucker.c ../zad1/utils.c posix.c ../zad1/colors.c
 	$(CC) $(CFLAGS) ../zad1/box.c ../zad1/cirque_memblock.c ../zad1/conveyor_belt.c ../zad1/errors.c ../zad1/trucker.c ../zad1/utils.c posix.c ../zad1/colors.c -o trucker -lrt -pthread

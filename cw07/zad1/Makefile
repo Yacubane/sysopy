@@ -1,10 +1,7 @@
 CC = gcc
 CFLAGS = -Wall
 
-.PHONY: test clean
-
-all : test
-default : all
+.PHONY: clean
 
 trucker : box.c cirque_memblock.c conveyor_belt.c errors.c trucker.c utils.c sysv.c colors.c
 	$(CC) $(CFLAGS) box.c cirque_memblock.c conveyor_belt.c errors.c trucker.c utils.c sysv.c colors.c -o trucker -lrt

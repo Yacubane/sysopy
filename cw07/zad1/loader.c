@@ -41,7 +41,7 @@ void put_box()
     if (res == 0)
     {
         set_color(ANSI_COLOR_GREEN);
-        printf("Loader PID: %7d  TIME: %5ld %5ld LOADED: %dkg",
+        printf("Loader PID: %7d  TIME: %5ld %5ld LOADED: %d",
                pid, box.timestamp.tv_sec,
                box.timestamp.tv_usec, weight);
         reset_color();
