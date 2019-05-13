@@ -76,8 +76,8 @@ int que_peek(void *queue_ptr, int elem_num, void *item_ptr)
     }
     else
     {
-        elem_num = elem_num % queue->actual_size;
-        memcpy(item_ptr, queue->array + (queue->head + elem_num) * queue->item_size, queue->item_size);
+        elem_num = (queue->head + elem_num) % queue->max_size;
+        memcpy(item_ptr, queue->array + elem_num * queue->item_size, queue->item_size);
     }
     return 0;
 }

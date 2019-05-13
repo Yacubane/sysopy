@@ -9,6 +9,7 @@
 #include "shared.h"
 #include "queue.h"
 #include "config.h"
+#include "colors.h"
 
 conveyor_belt_t *cb;
 int semid;
@@ -28,6 +29,22 @@ void onexit()
 void handleSIGINT(int sig)
 {
     exit(0);
+}
+
+struct timeval timeval_diff(struct timeval start, struct timeval stop)
+{
+    struct timeval temp;
+    if ((stop.tv_usec - start.tv_usec) < 0)
+    {
+        temp.tv_sec = stop.tv_sec - start.tv_sec - 1;
+        temp.tv_usec = 1000000 + stop.tv_usec - start.tv_usec;
+    }
+    else
+    {
+        temp.tv_sec = stop.tv_sec - start.tv_sec;
+        temp.tv_usec = stop.tv_usec - start.tv_usec;
+    }
+    return temp;
 }
 
 int main(int argc, char *argv[])
@@ -79,7 +96,7 @@ int main(int argc, char *argv[])
 
     while (1)
     {
-        if (cb_peek(cb, semid, &box) < 0)
+        if (cb_get(cb, semid, &box) < 0)
         {
             if (was_empty == 0)
                 printf("Conveyor belt empty\n");
@@ -104,18 +121,19 @@ int main(int argc, char *argv[])
         if (box.weight > trucker_capacity)
             return err("Trucker capacity is too small", -1);
 
-        cb_get(cb, semid, &box);
         usleep(TRUCKER_LOAD_BOX_TIME_MICROS);
 
         actual_weight += box.weight;
 
-        int elapsed = ((timestamp.tv_sec - box.timestamp.tv_sec) * 1000000) +
-                      (timestamp.tv_usec - box.timestamp.tv_usec);
+        struct timeval diff = timeval_diff(box.timestamp, timestamp);
+
+        long elapsed = diff.tv_usec + (diff.tv_sec * 1000000);
+        long timestamp_val = timestamp.tv_usec + (timestamp.tv_sec * 1000000);
 
         printf(
-            "GOT BOX FROM PID: %7d TIME %10dus WEIGHT %2d OCCUPIED %2d REMAIN %2d\n",
+            "BOX PID: %7d TIME %7ldus WEIGHT %2d OCCUPIED %2d REMAIN %2d TIMESTAMP %ldus\n",
             box.pid, elapsed, box.weight, actual_weight,
-            trucker_capacity - actual_weight);
+            trucker_capacity - actual_weight, timestamp_val);
     }
 
     return 0;

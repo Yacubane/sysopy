@@ -41,9 +41,10 @@ void put_box()
     if (res == 0)
     {
         set_color(ANSI_COLOR_GREEN);
-        printf("Loader PID: %7d  TIME: %5ld %5ld LOADED: %d",
-               pid, box.timestamp.tv_sec,
-               box.timestamp.tv_usec, weight);
+        long timestamp = box.timestamp.tv_usec + (box.timestamp.tv_sec * 1000000);
+
+        printf("Loader PID: %7d LOADED: %3d TIMESTAMP: %ld ",
+               pid, weight, timestamp);
         reset_color();
     }
 
@@ -63,7 +64,7 @@ void put_box()
         exit(-1);
     else if (res == -4) //trucker closed
         exit(-1);
-        
+
     last_res = res;
 }
 
