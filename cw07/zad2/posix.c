@@ -90,7 +90,7 @@ int sha_opnsem(int key)
     char path[64];
     sprintf(path, "/%d", key);
 
-    sem_t *id = sem_open(path, O_RDWR, 0644);
+    sem_t *id = sem_open(path, O_RDWR, 0666);
     sem_array[sem_index++] = id;
     if (id == SEM_FAILED)
         return perr("Can't open semaphore", -1);
@@ -124,6 +124,6 @@ int sha_lcksem(int id)
 int sha_unlcksem(int id)
 {
     if (sem_post(sem_array[id]) == -1)
-        return perr("Can't  lock semaphore", -1);
+        return perr("Can't unlock semaphore", -1);
     return 0;
 }

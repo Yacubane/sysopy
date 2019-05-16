@@ -45,7 +45,9 @@
         "msg.h": "c",
         "box.h": "c",
         "queue.h": "c",
-        "type_traits": "c"
+        "type_traits": "c",
+        "pthread.h": "c",
+        "image.h": "c"
     },
     "files.exclude": {
         "**/.classpath": true,
