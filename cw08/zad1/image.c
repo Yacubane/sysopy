@@ -16,6 +16,26 @@ int img_getarrsize(img_t *image)
     return -1;
 }
 
+int img_allocate(img_t *image, int width, int height, int max_value, color_mode_t color_mode)
+{
+    image->color_mode = color_mode;
+    image->width = width;
+    image->height = height;
+    image->max_value = max_value;
+    image->array = calloc(img_getarrsize(image), sizeof(int));
+    return 0;
+}
+
+int img_deallocate(img_t *image)
+{
+    image->color_mode = 0;
+    image->width = 0;
+    image->height = 0;
+    image->max_value = 0;
+    free(image->array);
+    return 0;
+}
+
 int img_load(const char *path, img_t *out)
 {
     FILE *fd;
@@ -53,12 +73,12 @@ int img_load(const char *path, img_t *out)
             {
                 if (i == 0)
                 {
-                    if (parse_num(ptr, &width) < 0)
+                    if (parse_int(ptr, &width) < 0)
                         return -1;
                 }
                 else if (i == 1)
                 {
-                    if (parse_num(ptr, &height) < 0)
+                    if (parse_int(ptr, &height) < 0)
                         return -1;
                 }
                 i++;
@@ -73,7 +93,7 @@ int img_load(const char *path, img_t *out)
         {
 
             int max_value = 0;
-            if (parse_num(buffer, &max_value) < 0)
+            if (parse_int(buffer, &max_value) < 0)
                 return err("Cannot open file 3 (unknown image format)", -1);
             out->max_value = max_value;
             out->array = malloc(img_getarrsize(out) * sizeof(int));
@@ -85,7 +105,7 @@ int img_load(const char *path, img_t *out)
             while (ptr != NULL)
             {
                 int tmp;
-                if (parse_num(ptr, &tmp) < 0)
+                if (parse_int(ptr, &tmp) < 0)
                 {
                     return err("Cannot open file 4 (unknown image format)", -1);
                 }
@@ -96,7 +116,7 @@ int img_load(const char *path, img_t *out)
         main_line++;
     }
 
-    printf("%d %d \n", index,img_getarrsize(out));
+    printf("%d %d \n", index, img_getarrsize(out));
     if (index != img_getarrsize(out))
         return err("Cannot open file 5 (unknown image format)", -1);
 
@@ -139,12 +159,7 @@ int img_save(const char *path, img_t *image)
 
 int img_new(img_t *out, img_t *image)
 {
-    out->color_mode = image->color_mode;
-    out->width = image->width;
-    out->height = image->height;
-    out->max_value = image->max_value;
-    out->array = calloc(img_getarrsize(image), sizeof(int));
-    return 0;
+    return img_allocate(out, image->width, image->height, image->max_value, image->color_mode);
 }
 
 int img_getpixelindex(img_t *image, int x, int y, int *index)

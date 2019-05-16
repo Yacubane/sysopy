@@ -47,7 +47,9 @@
         "queue.h": "c",
         "type_traits": "c",
         "pthread.h": "c",
-        "image.h": "c"
+        "image.h": "c",
+        "filter.h": "c",
+        "math.h": "c"
     },
     "files.exclude": {
         "**/.classpath": true,

@@ -10,23 +10,39 @@
 
 #define eps 0.000001
 
-int filter_normalize(filter_t *filter)
+int filter_allocate(filter_t *filter, int size)
 {
-    int sum = 0;
-    int num = filter->size * filter->size;
-    for (int i = 0; i < num; i++)
-        sum += filter->array[i];
+    filter->size = size;
+    filter->array = malloc(sizeof(double) * size * size);
+    filter->normalized = 0;
+    return 0;
+}
+int filter_deallocate(filter_t *filter)
+{
+    filter->size = 0;
+    free(filter->array);
+    filter->normalized = 0;
+    return 0;
+}
 
-    if (sum == 0)
+static int transform_coords(int *x, int *y, img_t *image, edge_mode_t edge_mode)
+{
+    switch (edge_mode)
     {
-        filter->normalized = 1;
-        return 0;
+    case EDGE_WRAP:
+        if (*x < 0)
+            *x = 0;
+        if (*y < 0)
+            *y = 0;
+        if (*x >= image->width)
+            *x = image->width - 1;
+        if (*y >= image->height)
+            *y = image->height - 1;
+        break;
+    default:
+        return err("Unknown edge mode", -1);
+        break;
     }
-
-    for (int i = 0; i < num; i++)
-        filter->array[i] /= sum;
-
-    filter->normalized = 1;
     return 0;
 }
 
@@ -48,18 +64,17 @@ int filter_load(const char *path, filter_t *filter)
         if (main_line == 0)
         {
             int size = 0;
-            if (parse_num(buffer, &size) < 0)
+            if (parse_int(buffer, &size) < 0)
                 return -1;
-            filter->size = size;
-            filter->array = malloc(filter->size * filter->size * sizeof(float));
+            filter_allocate(filter, size);
         }
         else
         {
             char *ptr = strtok(buffer, " \r\n");
             while (ptr != NULL)
             {
-                int tmp;
-                if (parse_num(ptr, &tmp) < 0)
+                double tmp;
+                if (parse_double(ptr, &tmp) < 0)
                 {
                     return err("Cannot open file (unknown image format)", -1);
                 }
@@ -87,24 +102,41 @@ int filter_load(const char *path, filter_t *filter)
     return 0;
 }
 
-static int transform_coords(int *x, int *y, img_t *image, edge_mode_t edge_mode)
+int filter_save(const char *path, filter_t *filter)
 {
-    switch (edge_mode)
+    FILE *fd;
+    if ((fd = fopen(path, "w")) != NULL)
     {
-    case EDGE_WRAP:
-        if (*x < 0)
-            *x = 0;
-        if (*y < 0)
-            *y = 0;
-        if (*x >= image->width)
-            *x = image->width - 1;
-        if (*y >= image->height)
-            *x = image->height - 1;
-        break;
-    default:
-        return err("Unknown edge mode", -1);
-        break;
+
+        fprintf(fd, "%d", filter->size);
+        for (int i = 0; i < filter->size * filter->size; i++)
+        {
+            if (i % filter->size == 0)
+                fprintf(fd, "\n");
+            fprintf(fd, "%.10f ", filter->array[i]);
+        }
     }
+    fclose(fd);
+    return 0;
+}
+
+int filter_normalize(filter_t *filter)
+{
+    int sum = 0;
+    int num = filter->size * filter->size;
+    for (int i = 0; i < num; i++)
+        sum += filter->array[i];
+
+    if (sum == 0)
+    {
+        filter->normalized = 1;
+        return 0;
+    }
+
+    for (int i = 0; i < num; i++)
+        filter->array[i] /= sum;
+
+    filter->normalized = 1;
     return 0;
 }
 
@@ -113,7 +145,7 @@ int filter_apply(filter_t *filter, img_t *image_in, img_t *image_out, int x, int
     if (filter->normalized == 0)
         return err("Filter not normalized", -1);
 
-    float pixel_values[3];
+    double pixel_values[3];
     for (int i = 0; i < 3; i++)
         pixel_values[i] = 0;
 
@@ -177,6 +209,5 @@ int filter_apply(filter_t *filter, img_t *image_in, img_t *image_out, int x, int
         break;
     }
 
-    // printf("%f %d\n", pixel_value, image_out->array[out_pixel_index]);
     return 0;
 }

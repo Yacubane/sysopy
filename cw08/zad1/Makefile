@@ -3,13 +3,11 @@ CFLAGS = -Wall
 
 .PHONY: clean
 
-main : main.c image.c filter.c errors.c utils.c
-	$(CC) $(CFLAGS) main.c image.c filter.c errors.c utils.c -o main -pthread
+main : main.c image.c filter.c errors.c utils.c gaussian_filter.c
+	$(CC) $(CFLAGS) main.c image.c filter.c errors.c utils.c gaussian_filter.c -o main -lm -pthread
 
 run : main
 	./main
 
 clean :
-	rm -f trucker
-	rm -f loader
-	rm -f spawner
+	rm -f main
