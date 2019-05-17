@@ -21,4 +21,5 @@ clean :
 	rm -f filters_generator
 	rm -rf generated_filters/*
 	rm -rf images_out/*
+	rm -f test
 

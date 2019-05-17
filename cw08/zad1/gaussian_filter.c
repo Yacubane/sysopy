@@ -10,8 +10,6 @@ int gauss_filter_generate(double sigma, int size, filter_t *filter)
         return -1;
     double r, s = 2.0 * sigma * sigma;
 
-    double sum = 0.0;
-
     int offset = size / 2;
     int index = 0;
     for (int y = -offset; y <= offset; y++)
@@ -19,7 +17,6 @@ int gauss_filter_generate(double sigma, int size, filter_t *filter)
         {
             r = sqrt(x * x + y * y);
             filter->array[index] = (exp(-(r * r) / s)) / (M_PI * s);
-            sum += filter->array[index];
             index++;
         }
 

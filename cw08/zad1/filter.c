@@ -8,7 +8,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define eps 0.0001
+#define eps 0.0000001
 
 int filter_allocate(filter_t *filter, int size)
 {
@@ -122,7 +122,7 @@ int filter_save(const char *path, filter_t *filter)
 
 int filter_normalize(filter_t *filter)
 {
-    int sum = 0;
+    double sum = 0;
     int num = filter->size * filter->size;
     for (int i = 0; i < num; i++)
         sum += filter->array[i];
