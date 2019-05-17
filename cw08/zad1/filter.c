@@ -8,7 +8,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define eps 0.000001
+#define eps 0.0001
 
 int filter_allocate(filter_t *filter, int size)
 {

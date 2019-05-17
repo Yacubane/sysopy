@@ -116,7 +116,6 @@ int img_load(const char *path, img_t *out)
         main_line++;
     }
 
-    printf("%d %d \n", index, img_getarrsize(out));
     if (index != img_getarrsize(out))
         return err("Cannot open file 5 (unknown image format)", -1);
 
