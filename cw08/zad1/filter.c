@@ -29,7 +29,7 @@ static int transform_coords(int *x, int *y, img_t *image, edge_mode_t edge_mode)
 {
     switch (edge_mode)
     {
-    case EDGE_WRAP:
+    case EDGE_EXTEND:
         if (*x < 0)
             *x = 0;
         if (*y < 0)

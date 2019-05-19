@@ -48,7 +48,7 @@ void *thread_fun(void *ptr)
         int right_edge_x = (*thread_num + 1) * (image.width / (float)threads_num);
         for (int x = left_edge_x; x < right_edge_x; x++)
             for (int y = 0; y < image.height; y++)
-                filter_apply(&filter, &image, &out_image, x, y, EDGE_WRAP);
+                filter_apply(&filter, &image, &out_image, x, y, EDGE_EXTEND);
     }
     else if (threads_type == THREADS_TYPE_INTERLEAVED)
     {
@@ -56,7 +56,7 @@ void *thread_fun(void *ptr)
         while (x < image.width)
         {
             for (int y = 0; y < image.height; y++)
-                filter_apply(&filter, &image, &out_image, x, y, EDGE_WRAP);
+                filter_apply(&filter, &image, &out_image, x, y, EDGE_EXTEND);
             x += threads_num;
         }
     }

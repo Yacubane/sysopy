@@ -1,7 +1,7 @@
 #pragma once
 #include "image.h"
 
-#define EDGE_WRAP (edge_mode_t)1
+#define EDGE_EXTEND (edge_mode_t)1
 
 typedef int edge_mode_t;
 
