@@ -19,7 +19,7 @@ int main()
 
     for (int y = 0; y < image.height; y++)
         for (int x = 0; x < image.width; x++)
-            filter_apply(&filter, &image, &image_out, x, y, EDGE_WRAP);
+            filter_apply(&filter, &image, &image_out, x, y, EDGE_EXTEND);
 
     img_save("images_out/lena.ascii.pgm", &image_out);
     
