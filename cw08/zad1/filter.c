@@ -53,40 +53,21 @@ int filter_load(const char *path, filter_t *filter)
     {
         return err("Cannot open image", -1);
     }
-    char buffer[1024];
-    int main_line = 0;
-    int index = 0;
-    while (fgets(buffer, 1024, fd) != NULL)
+    char buffer[128];
+    while (fgets(buffer, 128, fd) != NULL)
     {
         if (buffer[0] == '#')
             continue;
 
-        if (main_line == 0)
-        {
-            int size = 0;
-            if (parse_int(buffer, &size) < 0)
-                return -1;
-            filter_allocate(filter, size);
-        }
-        else
-        {
-            char *ptr = strtok(buffer, " \r\n");
-            while (ptr != NULL)
-            {
-                double tmp;
-                if (parse_double(ptr, &tmp) < 0)
-                {
-                    return err("Cannot open file (unknown image format)", -1);
-                }
-                filter->array[index++] = tmp;
-                ptr = strtok(NULL, " \r\n");
-            }
-        }
-        main_line++;
+        int size = 0;
+        if (parse_int(buffer, &size) < 0)
+            return -1;
+        filter_allocate(filter, size);
+        break;
     }
-
-    if (index != (filter->size * filter->size))
-        return err("Cannot open file (unknown image format)", -1);
+    for (int i = 0; i < filter->size * filter->size; i++)
+        if (fscanf(fd, "%lf", &filter->array[i]) != 1)
+            return err("Cannot read array %d", i);
 
     int sum = 0;
     int num = filter->size * filter->size;

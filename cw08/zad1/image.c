@@ -43,10 +43,9 @@ int img_load(const char *path, img_t *out)
     {
         return err("Cannot open image", -1);
     }
-    char buffer[2048];
+    char buffer[256];
     int main_line = 0;
-    int index = 0;
-    while (fgets(buffer, 2048, fd) != NULL)
+    while (fgets(buffer, 256, fd) != NULL)
     {
         if (buffer[0] == '#')
             continue;
@@ -97,27 +96,13 @@ int img_load(const char *path, img_t *out)
                 return err("Cannot open file 3 (unknown image format)", -1);
             out->max_value = max_value;
             out->array = malloc(img_getarrsize(out) * sizeof(int));
-        }
-        else
-        {
-
-            char *ptr = strtok(buffer, " \r\n");
-            while (ptr != NULL)
-            {
-                int tmp;
-                if (parse_int(ptr, &tmp) < 0)
-                {
-                    return err("Cannot open file 4 (unknown image format)", -1);
-                }
-                out->array[index++] = tmp;
-                ptr = strtok(NULL, " \r\n");
-            }
+            break;
         }
         main_line++;
     }
-
-    if (index != img_getarrsize(out))
-        return err("Cannot open file 5 (unknown image format)", -1);
+    for (int i = 0; i < out->width * out->height; i++)
+        if (fscanf(fd, "%d", &out->array[i]) != 1)
+            return err("Cannot read pixel %d", i);
 
     fclose(fd);
     return 0;
