@@ -100,7 +100,8 @@ int img_load(const char *path, img_t *out)
         }
         main_line++;
     }
-    for (int i = 0; i < out->width * out->height; i++)
+
+    for (int i = 0; i < img_getarrsize(out); i++)
         if (fscanf(fd, "%d", &out->array[i]) != 1)
             return err("Cannot read pixel %d", i);
 

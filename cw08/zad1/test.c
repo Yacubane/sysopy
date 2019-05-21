@@ -8,7 +8,7 @@
 int main()
 {
     img_t image;
-    img_load("images/lena.ascii.pgm", &image);
+    img_load("images/lena.ascii.ppm", &image);
 
     img_t image_out;
     img_new(&image_out, &image);
@@ -21,7 +21,7 @@ int main()
         for (int x = 0; x < image.width; x++)
             filter_apply(&filter, &image, &image_out, x, y, EDGE_EXTEND);
 
-    img_save("images_out/lena.ascii.pgm", &image_out);
+    img_save("images_out/lena.ascii.ppm", &image_out);
     
     img_deallocate(&image);
     img_deallocate(&image_out);
