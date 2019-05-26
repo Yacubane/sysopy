@@ -49,7 +49,8 @@
         "pthread.h": "c",
         "image.h": "c",
         "filter.h": "c",
-        "math.h": "c"
+        "math.h": "c",
+        "passenger.h": "c"
     },
     "files.exclude": {
         "**/.classpath": true,
