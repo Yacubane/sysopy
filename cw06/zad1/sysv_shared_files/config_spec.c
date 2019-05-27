@@ -1,9 +1,7 @@
 #include "config_spec.h"
-char *get_home_dir()
-{
-    return getenv("HOME");
+char* get_home_dir() {
+  return getenv("HOME");
 }
-key_t get_server_key()
-{
-    return ftok(get_home_dir(), SERVER_PROJ_ID);
+key_t get_server_key() {
+  return ftok(get_home_dir(), SERVER_PROJ_ID);
 }

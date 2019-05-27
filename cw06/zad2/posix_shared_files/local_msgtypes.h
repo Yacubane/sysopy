@@ -10,4 +10,3 @@
 #define MTYPE_2FRIENDS 'Z'
 #define MTYPE_2ONE 'O'
 #define MTYPE_INIT 'I'
-

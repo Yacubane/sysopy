@@ -5,4 +5,3 @@ int add_report_text(char* content);
 void start_report_timer();
 int stop_report_timer(char* text);
 int stop_reporting();
-

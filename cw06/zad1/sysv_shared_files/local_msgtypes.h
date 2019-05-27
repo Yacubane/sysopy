@@ -11,4 +11,3 @@
 #define MTYPE_2ONE 9
 #define MTYPE_INIT 10
 #define MTYPE_MAX 10
-
