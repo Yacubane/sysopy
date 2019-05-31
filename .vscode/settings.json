@@ -50,7 +50,8 @@
         "image.h": "c",
         "filter.h": "c",
         "math.h": "c",
-        "passenger.h": "c"
+        "passenger.h": "c",
+        "un.h": "c"
     },
     "files.exclude": {
         "**/.classpath": true,
