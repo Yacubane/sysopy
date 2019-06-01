@@ -51,7 +51,10 @@
         "filter.h": "c",
         "math.h": "c",
         "passenger.h": "c",
-        "un.h": "c"
+        "un.h": "c",
+        "cmath": "c",
+        "initializer_list": "c",
+        "string_view": "c"
     },
     "files.exclude": {
         "**/.classpath": true,
