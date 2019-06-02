@@ -7,11 +7,11 @@ SRC =
 
 all : main
 
-client : $(SRC) $(HEADERS) client.c queue.c errors.c utils.c
-	$(CC) $(CFLAGS) $(SRC) client.c queue.c errors.c utils.c -o client -pthread -lm
+client : $(SRC) $(HEADERS) client.c queue.c errors.c utils.c colors.c
+	$(CC) $(CFLAGS) $(SRC) client.c queue.c errors.c utils.c colors.c -D TCP -o client -pthread -lm
 
-server : $(SRC) $(HEADERS) server.c errors.c utils.c
-	$(CC) $(CFLAGS) $(SRC) server.c errors.c utils.c -o server -pthread -lm
+server : $(SRC) $(HEADERS) server.c errors.c utils.c colors.c
+	$(CC) $(CFLAGS) $(SRC) server.c errors.c utils.c colors.c -D TCP -o server -pthread -lm
 
 clean :
 	rm -f client

@@ -54,7 +54,8 @@
         "un.h": "c",
         "cmath": "c",
         "initializer_list": "c",
-        "string_view": "c"
+        "string_view": "c",
+        "typeinfo": "c"
     },
     "files.exclude": {
         "**/.classpath": true,
