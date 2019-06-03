@@ -19,11 +19,14 @@
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 
-#define PORT 5555
-#define MAXMSG 512
-
 #define MODE_TCP 1
 #define MODE_UDP 0
+
+#define MSGTYPE_PING 1
+#define MSGTYPE_RESULT 2
+#define MSGTYPE_REQUEST 3
+#define MSGTYPE_UDP_CONNECT 4
+
 
 #ifdef UDP
 int mode = MODE_UDP;
@@ -34,7 +37,6 @@ int mode = MODE_TCP;
 pthread_mutex_t queue_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t queue_new_element_cond = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t socket_mutex = PTHREAD_MUTEX_INITIALIZER;
-
 pthread_mutex_t socket_send_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 int sock1;
@@ -65,26 +67,24 @@ queue_t requests;
 struct sockaddr* udp_sockaddr;
 socklen_t udp_sockaddr_size;
 
-void unix_tcp_test(char* path) {
+void unix_tcp_start(char* path) {
   struct sockaddr_un name;
 
-  /* Create the socket. */
   sock1 = socket(PF_UNIX, SOCK_STREAM, 0);
   if (sock1 < 0) {
     perror("socket");
     exit(EXIT_FAILURE);
   }
 
-  /* Give the socket a name. */
   name.sun_family = AF_UNIX;
   strcpy(name.sun_path, path);
 
   if (connect(sock1, (struct sockaddr*)&name, sizeof(name))) {
-    perror("Connection failed2");
+    perror("Connection failed");
   }
 }
 
-void unix_udp_test(char* path) {
+void unix_udp_start(char* path) {
   struct sockaddr_un* server = malloc(sizeof(struct sockaddr_un));
   server->sun_family = AF_UNIX;
   strcpy(server->sun_path, path);
@@ -94,14 +94,12 @@ void unix_udp_test(char* path) {
 
   struct sockaddr_un client;
 
-  /* Create the socket. */
   sock1 = socket(PF_UNIX, SOCK_DGRAM, 0);
   if (sock1 < 0) {
     perror("socket");
     exit(EXIT_FAILURE);
   }
 
-  /* Give the socket a name. */
   char buffer[128];
   snprintf(buffer, 128, "/tmp/socket_%d", getpid());
 
@@ -115,17 +113,15 @@ void unix_udp_test(char* path) {
   }
 }
 
-void inet_tcp_test(char* address, int port) {
+void inet_tcp_start(char* address, int port) {
   struct sockaddr_in name;
 
-  /* Create the socket. */
   sock1 = socket(PF_INET, SOCK_STREAM, 0);
   if (sock1 < 0) {
     perror("socket");
     exit(EXIT_FAILURE);
   }
 
-  /* Give the socket a name. */
   name.sin_family = AF_INET;
   name.sin_port = htons(port);
   inet_pton(AF_INET, address, &(name.sin_addr));
@@ -134,17 +130,15 @@ void inet_tcp_test(char* address, int port) {
   }
 }
 
-void inet_udp_test(char* address, int port) {
+void inet_udp_start(char* address, int port) {
   struct sockaddr_in* name = malloc(sizeof(struct sockaddr_in));
 
-  /* Create the socket. */
   sock1 = socket(PF_INET, SOCK_DGRAM, 0);
   if (sock1 < 0) {
     perror("socket");
     exit(EXIT_FAILURE);
   }
 
-  /* Give the socket a name. */
   name->sin_family = AF_INET;
   name->sin_port = htons(port);
   inet_pton(AF_INET, address, &(name->sin_addr));
@@ -156,10 +150,6 @@ void inet_udp_test(char* address, int port) {
     perror("Connection failed");
   }
 }
-#define MSGTYPE_PING 1
-#define MSGTYPE_RESULT 2
-#define MSGTYPE_REQUEST 3
-#define MSGTYPE_UDP_CONNECT 4
 
 int init_word_counter(word_counter_t* counter) {
   counter->first = malloc(sizeof(word_node_t));
@@ -167,7 +157,8 @@ int init_word_counter(word_counter_t* counter) {
   counter->size = 0;
   return 0;
 }
-int add_word_counter(word_counter_t* counter, char* word, int size) {
+
+int add_to_word_counter(word_counter_t* counter, char* word, int size) {
   for (int i = 0; i < size; i++)
     word[i] = tolower(word[i]);
 
@@ -212,7 +203,7 @@ void* request_handler_fun(void* data) {
     init_word_counter(&word_counter);
 
     int words_count = 0;
-    int state = 1;
+    int state = 1; //state 1 => i'm after space : state 0 => i'm after some text
     for (int j = 0; j < request->size; j++) {
       char ch = request->content[j];
       if (ch == '\t' || ch == ' ' || ch == '\n' || ch == '\r') {
@@ -221,18 +212,18 @@ void* request_handler_fun(void* data) {
       } else {
         if (state == 1) {
           words_count++;
-          int k = j + 1;
+          int k = j + 1; // k => last index of word, j => first index of word
           while (k < request->size) {
             char ch = request->content[k];
             if (ch == '\t' || ch == ' ' || ch == '\n' || ch == '\r' ||
                 ch == '.' || ch == ',' || ch == ':' || ch == ';' || ch == ')' ||
-                ch == '?' || ch == '!') {
+                ch == '?' || ch == '!') { //detect word end
               break;
             }
             k++;
           }
           if (k - j > 0)
-            add_word_counter(&word_counter, request->content + j, k - j);
+            add_to_word_counter(&word_counter, request->content + j, k - j);
         }
         state = 0;
       }
@@ -241,7 +232,7 @@ void* request_handler_fun(void* data) {
       colorprintf(ANSI_COLOR_YELLOW, "Sending result to server");
 
       pthread_mutex_lock(&socket_send_mutex);
-      int type = 2;
+      int type = MSGTYPE_RESULT;
       send(sock1, &type, 1, 0);
       send(sock1, &request->id, sizeof(int), 0);
       send(sock1, &words_count, sizeof(int), 0);
@@ -289,7 +280,7 @@ void* request_handler_fun(void* data) {
       colorprintf(ANSI_COLOR_YELLOW, "Sending result to server");
 
       pthread_mutex_lock(&socket_send_mutex);
-      int type = 2;
+      int type = MSGTYPE_RESULT;;
 
       int output_size = 0;
       output_size += 1;  // request type
@@ -369,15 +360,15 @@ int main(int argc, char* argv[]) {
   pthread_create(&id, NULL, request_handler_fun, &data);
   if (mode == MODE_TCP) {
     if (inet) {
-      inet_tcp_test(argv[3], port);
+      inet_tcp_start(argv[3], port);
     } else {
-      unix_tcp_test(argv[3]);
+      unix_tcp_start(argv[3]);
     }
   } else {
     if (inet) {
-      inet_udp_test(argv[3], port);
+      inet_udp_start(argv[3], port);
     } else {
-      unix_udp_test(argv[3]);
+      unix_udp_start(argv[3]);
     }
   }
 

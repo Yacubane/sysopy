@@ -64,8 +64,8 @@ pthread_mutex_t socket_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t clients_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 int request_counter = 0;
-int sock1;
-int sock2;
+int sock_inet;
+int sock_unix;
 fd_set active_fd_set, read_fd_set;
 
 void timeval_diff(struct timeval* start,
@@ -260,7 +260,6 @@ int make_inet_socket(uint16_t port) {
   int sock;
   struct sockaddr_in name;
 
-  /* Create the socket. */
   if (mode == MODE_TCP) {
     sock = socket(PF_INET, SOCK_STREAM, 0);
   } else {
@@ -326,7 +325,7 @@ void* ping_thread_fun(void* data) {
             FD_CLR(clients[j]->sockid, &active_fd_set);
             clients[j]->state = CLIENT_STATE_NULL;
             colorprintf(ANSI_COLOR_RED,
-                        "Removing client[%s] due to inactivity\n",
+                        "Removing client[%s] due to inactivity",
                         clients[j]->id);
           }
         }
@@ -334,7 +333,7 @@ void* ping_thread_fun(void* data) {
       pthread_mutex_lock(&socket_mutex);
       for (int i = 0; i < FD_SETSIZE; i++) {
         if (FD_ISSET(i, &active_fd_set)) {
-          if (i == sock1 || i == sock2) {
+          if (i == sock_inet || i == sock_unix) {
           } else {
             char msgsend = MSGTYPE_PING;
             send(i, &msgsend, 1, 0);
@@ -483,6 +482,70 @@ int send_request(char* path) {
   return 0;
 }
 
+int accept_client_from_tcp(int sockfd) {
+  size_t new;
+  unsigned int size = 0;
+  if (sockfd == sock_inet) {
+    struct sockaddr_in addr_in;
+    size = sizeof(addr_in);
+    new = accept(sockfd, (struct sockaddr*)&addr_in, &size);
+  } else if (sockfd == sock_unix) {
+    struct sockaddr_un addr_un;
+    size = sizeof(addr_un);
+    new = accept(sockfd, (struct sockaddr*)&addr_un, &size);
+  }
+
+  if (new < 0) {
+    perror("accept");
+    exit(EXIT_FAILURE);
+  }
+
+  struct timeval tv;
+  tv.tv_sec = 1;
+  tv.tv_usec = 0;
+  setsockopt(new, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof tv);
+
+  int found_index = -1;
+  for (int j = 0; j < CLIENTS_SIZE; j++)
+    if (clients[j]->state == CLIENT_STATE_NULL) {
+      gettimeofday(&clients[j]->last_ping_time, NULL);
+      clients[j]->sockid = new;
+      found_index = j;
+      break;
+    }
+  if (found_index == -1) {
+    printf("Exceeded clients size\n");
+    exit(2137);
+  }
+
+  int nbytes = recv(new, clients[found_index]->id, CLIENT_ID_SIZE, 0);
+  clients[found_index]->id[nbytes] = '\0';
+
+  int good_id = 1;
+  for (int j = 0; j < CLIENTS_SIZE; j++)
+    if (clients[j]->state != CLIENT_STATE_NULL && j != found_index) {
+      if (strcmp(clients[j]->id, clients[found_index]->id) == 0) {
+        printf("Already client with this id [%s]\n", clients[j]->id);
+        clients[found_index]->state = CLIENT_STATE_NULL;
+        close(new);
+        good_id = 0;
+        break;
+      }
+    }
+
+  if (nbytes > 0 && good_id) {
+    colorprintf(ANSI_COLOR_GREEN, "Added new client[%s]",
+                clients[found_index]->id);
+    FD_SET(new, &active_fd_set);
+    clients[found_index]->state = CLIENT_STATE_IDLE;
+  } else {
+    printf("Error adding new client\n");
+  }
+  return 0;
+}
+
+int inet;
+int port;
 int main(int argc, char* argv[]) {
   if (argc != 3)
     return err("Missing arguments <port> <unix_path>", -1);
@@ -507,25 +570,19 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  int i;
-  struct sockaddr_in clientname;
-  socklen_t size;
-
-  /* Create the socket and set it up to accept connections. */
-  sock1 = make_inet_socket(port);
-  sock2 = make_unix_socket(argv[2]);
+  sock_inet = make_inet_socket(port);
+  sock_unix = make_unix_socket(argv[2]);
 
   if (mode == MODE_TCP)
-    if (listen(sock1, 1) < 0 || listen(sock2, 1) < 0) {
+    if (listen(sock_inet, 1) < 0 || listen(sock_unix, 1) < 0) {
       perror("listen");
       exit(EXIT_FAILURE);
     }
 
-  /* Initialize the set of active sockets. */
   FD_ZERO(&active_fd_set);
   FD_SET(STDIN_FILENO, &active_fd_set);
-  FD_SET(sock1, &active_fd_set);
-  FD_SET(sock2, &active_fd_set);
+  FD_SET(sock_inet, &active_fd_set);
+  FD_SET(sock_unix, &active_fd_set);
 
   pthread_t id;
   int data = 0;
@@ -537,69 +594,20 @@ int main(int argc, char* argv[]) {
       exit(EXIT_FAILURE);
     }
 
-    for (i = 0; i < FD_SETSIZE; ++i)
+    for (int i = 0; i < FD_SETSIZE; ++i)
       if (FD_ISSET(i, &read_fd_set)) {
         if (i == STDIN_FILENO) {
           char path[128];
           size_t sz = read(0, path, sizeof(path));
           path[sz - 1] = '\0';
           send_request(path);
-        } else if (i == sock1 || i == sock2) {
+        } else if (i == sock_inet || i == sock_unix) {
           pthread_mutex_lock(&socket_mutex);
 
           if (mode == MODE_TCP) {
-            size_t new;
-            size = sizeof(clientname);
-            new = accept(i, (struct sockaddr*)&clientname, &size);
-            if (new < 0) {
-              perror("accept");
-              exit(EXIT_FAILURE);
-            }
-
-            struct timeval tv;
-            tv.tv_sec = 1;
-            tv.tv_usec = 0;
-            setsockopt(new, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv,
-                       sizeof tv);
-
-            int found_index = -1;
-            for (int j = 0; j < CLIENTS_SIZE; j++)
-              if (clients[j]->state == CLIENT_STATE_NULL) {
-                gettimeofday(&clients[j]->last_ping_time, NULL);
-                clients[j]->sockid = new;
-                found_index = j;
-                break;
-              }
-            if (found_index == -1) {
-              printf("Exceeded clients size\n");
-              exit(2137);
-            }
-
-            int nbytes = recv(new, clients[found_index]->id, CLIENT_ID_SIZE, 0);
-            clients[found_index]->id[nbytes] = '\0';
-
-            int good_id = 1;
-            for (int j = 0; j < CLIENTS_SIZE; j++)
-              if (clients[j]->state != CLIENT_STATE_NULL && j != found_index) {
-                if (strcmp(clients[j]->id, clients[found_index]->id) == 0) {
-                  printf("Already client with this id [%s]\n", clients[j]->id);
-                  clients[found_index]->state = CLIENT_STATE_NULL;
-                  close(new);
-                  good_id = 0;
-                  break;
-                }
-              }
-
-            if (nbytes > 0 && good_id) {
-              colorprintf(ANSI_COLOR_GREEN, "Added new client[%s]",
-                          clients[found_index]->id);
-              FD_SET(new, &active_fd_set);
-              clients[found_index]->state = CLIENT_STATE_IDLE;
-            } else {
-              printf("Error adding new client\n");
-            }
+            accept_client_from_tcp(i);
           } else if (mode == MODE_UDP) {
-            read_from_client_udp(i, (i == sock1) ? 1 : 0);
+            read_from_client_udp(i, (i == sock_inet) ? 1 : 0);
           }
           pthread_mutex_unlock(&socket_mutex);
 
